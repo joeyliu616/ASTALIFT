@@ -12,7 +12,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
     IdleProvider.idle(5); // in seconds
     IdleProvider.timeout(120); // in seconds
 
-    $urlRouterProvider.otherwise("/dashboards/dashboard_1");
+    $urlRouterProvider.otherwise("/sell/new");
 
     $ocLazyLoadProvider.config({
         // Set to true if you want to see what and when is dynamically loaded
@@ -21,36 +21,37 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
 
     $stateProvider
 
-        .state('dashboards', {
+        .state('sell', {
             abstract: true,
-            url: "/dashboards",
+            url: "/sell",
             templateUrl: "views/common/content.html",
         })
-        .state('dashboards.dashboard_1', {
-            url: "/dashboard_1",
-            templateUrl: "views/dashboard_1.html",
+        .state('sell.new', {
+            url: "/new",
+            templateUrl: "views/new_orders.html",
+            data: { pageTitle: '待处理订单' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
                         {
-
                             serie: true,
-                            name: 'angular-flot',
-                            files: [ 'js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
+                            files: ['js/plugins/dataTables/datatables.min.js','css/plugins/dataTables/datatables.min.css']
                         },
                         {
-                            name: 'angles',
-                            files: ['js/plugins/chartJs/angles.js', 'js/plugins/chartJs/Chart.min.js']
+                            serie: true,
+                            name: 'datatables',
+                            files: ['js/plugins/dataTables/angular-datatables.min.js']
                         },
                         {
-                            name: 'angular-peity',
-                            files: ['js/plugins/peity/jquery.peity.min.js', 'js/plugins/peity/angular-peity.js']
+                            serie: true,
+                            name: 'datatables.buttons',
+                            files: ['js/plugins/dataTables/angular-datatables.buttons.min.js']
                         }
                     ]);
                 }
             }
         })
-        .state('dashboards.dashboard_2', {
+        .state('sell.running', {
             url: "/dashboard_2",
             templateUrl: "views/dashboard_2.html",
             data: { pageTitle: 'Dashboard 2' },
@@ -78,7 +79,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
-        .state('dashboards.dashboard_3', {
+        .state('sell.finished', {
             url: "/dashboard_3",
             templateUrl: "views/dashboard_3.html",
             data: { pageTitle: 'Dashboard 3' },
@@ -154,36 +155,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
-        .state('dashboards.dashboard_5', {
-            url: "/dashboard_5",
-            templateUrl: "views/dashboard_5.html",
-            data: { pageTitle: 'Dashboard 5' },
-            resolve: {
-                loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
-                        {
-                            serie: true,
-                            name: 'angular-flot',
-                            files: [ 'js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
-                        },
-                        {
-                            files: ['js/plugins/sparkline/jquery.sparkline.min.js']
-                        }
-                    ]);
-                }
-            }
-        })
-        .state('layouts', {
-            url: "/layouts",
-            templateUrl: "views/layouts.html",
-            data: { pageTitle: 'Layouts' },
-        })
-        .state('charts', {
+        .state('buy', {
             abstract: true,
             url: "/charts",
             templateUrl: "views/common/content.html",
         })
-        .state('charts.flot_chart', {
+        .state('buy.list', {
             url: "/flot_chart",
             templateUrl: "views/graph_flot.html",
             data: { pageTitle: 'Flot chart' },
@@ -199,7 +176,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
-        .state('charts.rickshaw_chart', {
+        .state('buy.running', {
             url: "/rickshaw_chart",
             templateUrl: "views/graph_rickshaw.html",
             data: { pageTitle: 'Rickshaw chart' },
@@ -220,7 +197,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
-        .state('charts.peity_chart', {
+        .state('buy.finished', {
             url: "/peity_chart",
             templateUrl: "views/graph_peity.html",
             data: { pageTitle: 'Peity graphs' },
