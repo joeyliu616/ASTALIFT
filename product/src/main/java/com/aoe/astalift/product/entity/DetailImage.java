@@ -1,27 +1,30 @@
 package com.aoe.astalift.product.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by joey on 16-3-16.
  */
 @Entity
-public class DetailImage {
+@Table
+public class DetailImage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Integer id;
     private String url;
+    @CreationTimestamp
     private Date createTime;
+    private Boolean enable = true;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -39,5 +42,13 @@ public class DetailImage {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public Boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
     }
 }

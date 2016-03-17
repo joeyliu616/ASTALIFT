@@ -33,6 +33,7 @@ public class SellerOrderServiceImpl implements SellerOrderService {
         List<OrderInfoDto> list = new LinkedList<OrderInfoDto>();
         for (int i = 0; i < 20; i++) {
             OrderInfoDto orderInfoDto = new OrderInfoDto();
+            orderInfoDto.setId(new Integer(new Random().nextInt(1000)).toString());
             orderInfoDto.setStatus(0);
             orderInfoDto.setOrderDate(createTime());
             if(i%3 == 0){

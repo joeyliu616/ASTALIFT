@@ -157,20 +157,22 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
         })
         .state('buy', {
             abstract: true,
-            url: "/charts",
+            url: "/buy",
             templateUrl: "views/common/content.html",
         })
         .state('buy.list', {
-            url: "/flot_chart",
-            templateUrl: "views/graph_flot.html",
-            data: { pageTitle: 'Flot chart' },
+            url: "/list",
+            templateUrl: "views/product_list.html",
+            data: { pageTitle: '商品浏览' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
                         {
-                            serie: true,
-                            name: 'angular-flot',
-                            files: [ 'js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
+                            files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
+                        },
+                        {
+                            name: 'ui.footable',
+                            files: ['js/plugins/footable/angular-footable.js']
                         }
                     ]);
                 }

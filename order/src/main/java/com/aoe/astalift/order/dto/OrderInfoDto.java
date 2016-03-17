@@ -13,21 +13,22 @@ import java.util.List;
  * Created by joey on 16-3-16.
  */
 public class OrderInfoDto implements Serializable {
+    @JsonProperty
+    private String id;
 
-    @JsonProperty(value="order_date")
+    @JsonProperty(value="date")
     private Date orderDate;
 
     @JsonProperty("total")
     private float total;
 
     //眼霜-150ml 199x3x85% 每条格式如下： productTitle price x amount x discount
-    @JsonProperty("order_content")
+    @JsonProperty("content")
     private List<String> orderContent;
 
-    @JsonProperty("customer_name")
+    @JsonProperty("customer")
     private String customerName;
 
-    @JsonProperty("deliver_address")
     private String deliverAddress;
 
     @JsonProperty("complete_time")
@@ -92,5 +93,13 @@ public class OrderInfoDto implements Serializable {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

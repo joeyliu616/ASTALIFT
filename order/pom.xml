@@ -28,13 +28,7 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.aoe.astalift</groupId>
-            <artifactId>order</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-
+        
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -46,12 +40,6 @@
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
-        <!-- 替代 simpleDateFormat -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.9.2</version>
-        </dependency>
 
         <!-- 测试 -->
         <dependency>

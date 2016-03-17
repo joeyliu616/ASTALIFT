@@ -2921,7 +2921,21 @@ function loadingCtrl($scope, $timeout){
 }
 
 
-function datatablesCtrl($scope,DTOptionsBuilder){
+function datatablesCtrl($scope,DTOptionsBuilder,$http,$log){
+    $http.get('/sell/orders.json').success(
+        function(response){
+            $log.log(JSON.stringify(response));
+            $scope.items=response.data;
+            $.each($scope.items, function(n, item){
+                if(item.content.length > 1){
+                    item.content = item.content[0] + " 更多...";
+                }else{
+                    item.content = item.content[0];
+                }
+            });
+
+        }
+    );
 
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withDOM('<"html5buttons"B>lTfgitp')
@@ -2942,37 +2956,6 @@ function datatablesCtrl($scope,DTOptionsBuilder){
                 }
             }
         ]);
-
-    /**
-     * persons - Data used in Tables view for Data Tables plugin
-     */
-    $scope.persons = [
-        {
-            id: '1',
-            firstName: 'Monica',
-            lastName: 'Smith'
-        },
-        {
-            id: '2',
-            firstName: 'Sandra',
-            lastName: 'Jackson'
-        },
-        {
-            id: '3',
-            firstName: 'John',
-            lastName: 'Underwood'
-        },
-        {
-            id: '4',
-            firstName: 'Chris',
-            lastName: 'Johnatan'
-        },
-        {
-            id: '5',
-            firstName: 'Kim',
-            lastName: 'Rosowski'
-        }
-    ];
 
 }
 
@@ -3337,6 +3320,19 @@ function jstreeCtrl($scope) {
 
 }
 
+
+function productListCtrl($scope,$http,$log){
+
+    $http.get('/products.json').success(
+        function(response){
+            $log.log(JSON.stringify(response));
+            $scope.items=response.data;
+            $log.log(JSON.stringify($scope.items));
+        }
+    );
+}
+
+
 /**
  *
  * Pass all functions into module
@@ -3380,5 +3376,6 @@ angular
     .controller('truncateCtrl', truncateCtrl)
     .controller('touchspinCtrl', touchspinCtrl)
     .controller('tourCtrl', tourCtrl)
-    .controller('jstreeCtrl', jstreeCtrl);
+    .controller('jstreeCtrl', jstreeCtrl)
+    .controller('productListCtrl',productListCtrl);
 

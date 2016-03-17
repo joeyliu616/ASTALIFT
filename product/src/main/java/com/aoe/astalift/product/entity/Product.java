@@ -1,25 +1,29 @@
 package com.aoe.astalift.product.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by joey on 16-3-16.
  */
 @Entity
+@Table
 public class Product implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String id;
+    private Integer id;
 
-    private String productTitle;
+    @Column(nullable = false)
+    private String title;
 
     //保湿水， 眼霜等
-    private Integer type;
+    @Column(nullable = false)
+    private String type;
+
+    @Column(nullable = false)
+    private float price;
 
     //计量单位. 如眼霜==>毫升. 面膜==>片
     private Integer measure;
@@ -28,38 +32,41 @@ public class Product implements Serializable {
     private Integer amount;
 
     //产品详情. 可以是大段文字
-    private String productDetails;
+    private String detail;
 
     //产品首页图. 通常为缩略图的第一个
-    private String titleImageUrl;
+    @OneToOne(cascade=CascadeType.ALL)
+    private TitleImage titleImage;
 
-    //产品缩略图
-    private List<String> thumbnailUrls;
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name = "product_id")
+    private Set<Thumbnail> thumbnails;
 
-    //产品详情图片.
-    private List<String> detailsImageUrls;
+    @OneToMany(cascade=CascadeType.ALL)
+    @JoinColumn(name = "product_id")
+    private Set<DetailImage> detailImages;
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getProductTitle() {
-        return productTitle;
+    public String getTitle() {
+        return title;
     }
 
-    public void setProductTitle(String productTitle) {
-        this.productTitle = productTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -79,35 +86,43 @@ public class Product implements Serializable {
         this.amount = amount;
     }
 
-    public String getProductDetails() {
-        return productDetails;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setProductDetails(String productDetails) {
-        this.productDetails = productDetails;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 
-    public String getTitleImageUrl() {
-        return titleImageUrl;
+    public TitleImage getTitleImage() {
+        return titleImage;
     }
 
-    public void setTitleImageUrl(String titleImageUrl) {
-        this.titleImageUrl = titleImageUrl;
+    public void setTitleImage(TitleImage titleImage) {
+        this.titleImage = titleImage;
     }
 
-    public List<String> getThumbnailUrls() {
-        return thumbnailUrls;
+    public Set<Thumbnail> getThumbnails() {
+        return thumbnails;
     }
 
-    public void setThumbnailUrls(List<String> thumbnailUrls) {
-        this.thumbnailUrls = thumbnailUrls;
+    public void setThumbnails(Set<Thumbnail> thumbnails) {
+        this.thumbnails = thumbnails;
     }
 
-    public List<String> getDetailsImageUrls() {
-        return detailsImageUrls;
+    public Set<DetailImage> getDetailImages() {
+        return detailImages;
     }
 
-    public void setDetailsImageUrls(List<String> detailsImageUrls) {
-        this.detailsImageUrls = detailsImageUrls;
+    public void setDetailImages(Set<DetailImage> detailImages) {
+        this.detailImages = detailImages;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 }
