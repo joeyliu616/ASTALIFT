@@ -19,13 +19,13 @@ public class Order implements Serializable{
     private String orderNo;
 
     //供应方id
-    private String supplierId;
+    private Integer supplierId;
 
     //供应方名称
     private String supplierName;
 
     //采购方id
-    private String buyerId;
+    private Integer buyerId;
 
     //收货地址
     private String deliveryAddress;
@@ -59,11 +59,11 @@ public class Order implements Serializable{
         this.orderNo = orderNo;
     }
 
-    public String getSupplierId() {
+    public Integer getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(String supplierId) {
+    public void setSupplierId(Integer supplierId) {
         this.supplierId = supplierId;
     }
 
@@ -75,11 +75,11 @@ public class Order implements Serializable{
         this.supplierName = supplierName;
     }
 
-    public String getBuyerId() {
+    public Integer getBuyerId() {
         return buyerId;
     }
 
-    public void setBuyerId(String buyerId) {
+    public void setBuyerId(Integer buyerId) {
         this.buyerId = buyerId;
     }
 

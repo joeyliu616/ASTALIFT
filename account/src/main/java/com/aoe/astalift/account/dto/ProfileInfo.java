@@ -18,6 +18,8 @@ public class ProfileInfo {
     private String qq;
     @JsonProperty
     private String wechatId;
+    private String realName;
+
     public Integer getUserId() {
         return userId;
     }
@@ -64,5 +66,13 @@ public class ProfileInfo {
 
     public void setWechatId(String wechatId) {
         this.wechatId = wechatId;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 }

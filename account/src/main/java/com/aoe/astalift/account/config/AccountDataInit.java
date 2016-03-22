@@ -42,18 +42,21 @@ public class AccountDataInit {
     String agentMobile = "18001691011";
     String agentEmail = "jc0918@163.com";
     String agentPassword = "123456";
+    String agentName = "彭江城";
     String agentAddress = "上海杨浦区四平路1239号同济大学内(近彰武路)";
 
     String distributorUserName = "joeyliu616";
     String distributorEmail = "joeyliu616@live.cn";
     String distributorMobile = "18566231281";
     String distributorPassword = "123456";
+    String distributorName = "刘朝";
     String distributorAddress = "新疆昌吉北京南路";
 
     String retailerUserName = "gph203";
     String retailerEmail = "gph203@163.com";
     String retailerMobile = "18666665875";
     String retailerPassword = "123456";
+    String retailerName = "高成";
     String retailerAddress = "湖北麻城黄金桥";
 
     @PostConstruct
@@ -130,6 +133,7 @@ public class AccountDataInit {
         agentProfile.setAddress(agentAddress);
         agentProfile.setMobile(agentMobile);
         agentProfile.setEmail(agentEmail);
+        agentProfile.setRealName(agentName);
         agent.setUserProfile(agentProfile);
         agent = userRepository.save(agent);
 
@@ -150,6 +154,7 @@ public class AccountDataInit {
         distributorProfile.setEmail(distributorEmail);
         distributorProfile.setAddress(distributorAddress);
         distributorProfile.setMobile(distributorMobile);
+        distributorProfile.setRealName(distributorName);
         distributor.setUserProfile(distributorProfile);
         distributor = userRepository.save(distributor);
 
@@ -170,6 +175,7 @@ public class AccountDataInit {
         retailerProfile.setMobile(retailerMobile);
         retailerProfile.setEmail(retailerEmail);
         retailerProfile.setAddress(retailerAddress);
+        retailerProfile.setRealName(retailerName);
         retailer.setUserProfile(retailerProfile);
         retailer = userRepository.save(retailer);
 

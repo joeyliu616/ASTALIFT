@@ -18,6 +18,8 @@ public class UserProfile implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    private String realName;
+
     private String mobile;
 
     private String email;
@@ -96,5 +98,13 @@ public class UserProfile implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 }

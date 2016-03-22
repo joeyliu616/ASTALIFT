@@ -20,6 +20,7 @@ public class ProfileUtil {
         profileInfo.setMobile(userProfile.getMobile());
         profileInfo.setQq(userProfile.getQq());
         profileInfo.setWechatId(userProfile.getWechatId());
+        profileInfo.setRealName(userProfile.getRealName());
         return profileInfo;
     }
 
@@ -34,6 +35,7 @@ public class ProfileUtil {
         userProfile.setMobile(profileInfo.getMobile());
         userProfile.setEmail(profileInfo.getEmail());
         userProfile.setAddress(profileInfo.getAddress());
+        userProfile.setRealName(profileInfo.getRealName());
         return userProfile;
     }
 }
