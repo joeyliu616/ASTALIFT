@@ -158,7 +158,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
         .state('buy', {
             abstract: true,
             url: "/buy",
-            templateUrl: "views/common/content.html",
+            templateUrl: "views/common/content.html"
         })
         .state('buy.list', {
             url: "/list",
@@ -168,11 +168,33 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
                         {
+                            name: 'cgNotify',
+                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/angular-notify.min.js']
+                        },
+                        {
                             files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
                         },
                         {
                             name: 'ui.footable',
                             files: ['js/plugins/footable/angular-footable.js']
+                        }
+                    ]);
+                }
+            }
+        })
+        .state('buy.cart',{
+            url:"/cart",
+            templateUrl: "views/product_cart.html",
+            data: { pageTitle: '我的购物车' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            files: ['js/plugins/sweetalert/sweetalert.min.js', 'css/plugins/sweetalert/sweetalert.css']
+                        },
+                        {
+                            name: 'oitozero.ngSweetAlert',
+                            files: ['js/plugins/sweetalert/angular-sweetalert.min.js']
                         }
                     ]);
                 }
@@ -1353,10 +1375,13 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             data: { pageTitle: 'Off canvas menu', specialClass: 'canvas-menu' }
         });
 
+    ;
+
+
 }
 angular
     .module('inspinia')
     .config(config)
-    .run(function($rootScope, $state) {
+    .run(function($rootScope, $state, $http, $log) {
         $rootScope.$state = $state;
     });

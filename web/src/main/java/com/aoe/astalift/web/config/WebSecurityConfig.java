@@ -1,5 +1,4 @@
 /*
-
 package com.aoe.astalift.web.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
 
 
 */
@@ -24,34 +24,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth
                 .inMemoryAuthentication()
-                    .withUser("admin")
-                        .password("adminpassword")
-                        .roles("ADMIN","USER")
-                        .and()
-                    .withUser("user")
-                        .password("userpassword")
-                        .roles("USER");
+                .withUser("admin")
+                .password("adminpassword")
+                .roles("ADMIN", "USER")
+                .and()
+                .withUser("user")
+                .password("userpassword")
+                .roles("USER");
+
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http
                 .authorizeRequests()
-                    .antMatchers("/js*/
-/**","/css*/
-/**","/font-awesome*/
-/**","/template*/
+                    .antMatchers("/resources*/
 /**").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
-                    .loginPage("/login.html")
+                    .loginPage("/resources/index.html#/login")
+                    .loginProcessingUrl("/login.json")
+                    .usernameParameter("username")
+                    .passwordParameter("password")
                     .permitAll()
                     .and()
-                .logout()
-                    .permitAll();
+                .csrf()
+                .disable();
+
     }
+
+    //httpSecurity.authorizeRequests().anyRequest().authenticated().and()
+    //.formLogin().loginPage("/resources/index.html#/login").permitAll();
 }
 
 */

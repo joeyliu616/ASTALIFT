@@ -2648,7 +2648,6 @@ function metricsCtrl() {
  */
 function sweetAlertCtrl($scope, SweetAlert) {
 
-
     $scope.demo1 = function () {
         SweetAlert.swal({
             title: "Welcome in Alerts",
@@ -2922,7 +2921,7 @@ function loadingCtrl($scope, $timeout){
 
 
 function datatablesCtrl($scope,DTOptionsBuilder,$http,$log){
-    $http.get('/sell/orders.json').success(
+    $http.get('../sell/orders.json').success(
         function(response){
             $log.log(JSON.stringify(response));
             $scope.items=response.data;
@@ -3039,7 +3038,6 @@ function jstreeCtrl($scope) {
             'js' : {
                 'icon' : 'fa fa-file-text-o'
             }
-
         }
     };
 
@@ -3321,17 +3319,151 @@ function jstreeCtrl($scope) {
 }
 
 
-function productListCtrl($scope,$http,$log){
+function productListCtrl($scope,$http,$log,notify){
 
-    $http.get('/products.json').success(
-        function(response){
+    $http.get('/products.json').then(
+        function successCallback(responseData){
+            var response = responseData.data;
             $log.log(JSON.stringify(response));
             $scope.items=response.data;
             $log.log(JSON.stringify($scope.items));
+        },
+        function errorCallback(response){
+            handle403(response);
         }
     );
+
+
+    $scope.add2Cart = function (item){
+
+        var cartItem = {"productId":item.id,num:1};
+        $http.post("/buy/cart/" + item.id + ".json", cartItem).then(
+            function successCallback(response){
+                if(response.data.code == 0){
+                    notify({ message: '已保存到您的购物车', classes: 'alert-success'});
+                }
+        }, function errorCallback(response){
+                handle403(response);
+        })
+
+
+    }
 }
 
+function shoppingCartCtrl($scope, $http, $log, SweetAlert){
+
+    $scope.sum = 0;
+
+    function setItems(response){
+        $scope.items=response.data;
+        $scope.sum = 0;
+        angular.forEach($scope.items, function(item, key){
+            $scope.sum += (item.productInfo.price * 0.8 * item.quantity);
+        });
+    }
+
+
+    $http.get('/buy/cart/list_all.json').then(
+        function successCallback(responseData){
+            setItems(response.data);
+        },
+        function errorCallback(response){
+            handle403(response);
+        }
+    );
+
+
+    $scope.removeItem = function(productId){
+
+        $http.delete("/buy/cart/"+productId + ".json").then(
+            function successCallback(responseData){
+                setItems(response.data);
+            },
+            function errorCallback(response){
+                handle403(response);
+            }
+        );
+    }
+
+
+    $scope.saveCartSuccess = function () {
+        $http.put("/buy/cart.json",$scope.items).then(
+            function successCallback(responseData){
+                SweetAlert.swal({
+                    title: "成功!",
+                    text: "您的采购清单已经保存!",
+                    type: "success"
+                });
+            },
+            function errorCallback(response){
+                handle403(response);
+            }
+        );
+    }
+
+    $scope.reSum = function(){
+        $scope.sum = 0;
+        angular.forEach($scope.items, function(item, key){
+            $scope.sum += (item.productInfo.price * 0.8 * item.quantity);
+        });
+    }
+
+}
+
+
+function loginCtrl($log, $http, $scope,$rootScope){
+
+    $scope.error_code=0;
+    $scope.error_msg="";
+
+    $scope.login = function (account){
+        $http.post("/auth/login.json", account).then(
+            function successCallback(responseData){
+                $log.log(JSON.stringify(responseData))
+                if(0 != responseData.data.code){
+                    $scope.error_code = responseData.data.code;
+                    $scope.error_msg = responseData.data.msg;
+                }else{
+                    window.location = "/index.html#/widgets";
+                }
+            }
+        );
+    }
+}
+
+
+
+function navCtrl($scope, $http, $log){
+    $log.log("load ui menu");
+
+    $scope.sell = false;
+    $scope.buy = false;
+
+    $http.get("/auth/accountInfo").then(
+        function successCallback(responseData){
+            $log.log(JSON.stringify(responseData));
+            angular.forEach(responseData.data.data.roles, function(role, key){
+                if(role == "sell"){
+                    $scope.sell = true;
+                }
+                if(role == "buy"){
+                    $scope.buy = true;
+                }
+            });
+        },
+        function errorCallback(responseData){
+            $log.log(JSON.stringify(responseData));
+        }
+    );
+
+
+}
+
+function handle403(response){
+    if(response.status == 403){
+        window.location.href = "/index.html#/login";
+    }
+}
 
 /**
  *
@@ -3377,5 +3509,8 @@ angular
     .controller('touchspinCtrl', touchspinCtrl)
     .controller('tourCtrl', tourCtrl)
     .controller('jstreeCtrl', jstreeCtrl)
-    .controller('productListCtrl',productListCtrl);
+    .controller('productListCtrl',productListCtrl)
+    .controller('shoppingCartCtrl',shoppingCartCtrl)
+    .controller('loginCtrl', loginCtrl)
+    .controller('navCtrl',navCtrl);
 

@@ -8,7 +8,6 @@ public class BaseResponse<T> {
     private String msg;
     private T data;
 
-
     public BaseResponse() {
         this.code = 0;
         this.msg = "";
@@ -31,6 +30,11 @@ public class BaseResponse<T> {
         this.code = code;
         this.msg = msg;
         this.data = data;
+    }
+
+    public BaseResponse(ErrorTemplate template){
+        this.code = template.code;
+        this.msg = template.msg;
     }
 
     public Integer getCode() {

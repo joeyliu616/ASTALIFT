@@ -18,7 +18,7 @@ public interface ProductService {
     BaseResponse<List<ProductInfo>> listProductByType(String type);
 
     //获取产品详情
-    BaseResponse<ProductDetail> getProductDetail(String productId);
+    BaseResponse<ProductDetail> getProductDetail(Integer productId);
 
 
 }

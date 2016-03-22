@@ -8,6 +8,8 @@ import com.aoe.astalift.product.dto.util.ProductDtoUtil;
 import com.aoe.astalift.product.entity.Product;
 import com.aoe.astalift.product.repository.ProductRepository;
 import com.aoe.astalift.product.service.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,8 +24,11 @@ public class ProductServiceImpl implements ProductService {
     @Resource
     ProductRepository productRepository;
 
+    private static Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
+
     public BaseResponse<List<ProductInfo>> listProduct() {
         List<Product> products = productRepository.findAll();
+        logger.debug("size: products {} ", products.size());
         if(null == products || 0 == products.size()){
             return new BaseResponse<List<ProductInfo>>(ProductError.ProductNotFound.code,ProductError.ProductNotFound.msg );
         }
@@ -38,7 +43,11 @@ public class ProductServiceImpl implements ProductService {
         return new BaseResponse<List<ProductInfo>>(ProductDtoUtil.createProductInfoList(products));
     }
 
-    public BaseResponse<ProductDetail> getProductDetail(String productId) {
-        return null;
+    public BaseResponse<ProductDetail> getProductDetail(Integer productId) {
+        Product product = productRepository.findOne(productId);
+        if(null == product ){
+            return new BaseResponse<ProductDetail>(ProductError.ProductNotFound.code,ProductError.ProductNotFound.msg );
+        }
+        return new BaseResponse<ProductDetail>(ProductDtoUtil.createProductDetail(product));
     }
 }

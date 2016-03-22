@@ -7,16 +7,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class LoginDto {
     @JsonProperty
-    private String mobile;
+    private String singInString;
     @JsonProperty
     private String password;
 
-    public String getMobile() {
-        return mobile;
+    public String getSingInString() {
+        return singInString;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setSingInString(String singInString) {
+        this.singInString = singInString;
     }
 
     public String getPassword() {

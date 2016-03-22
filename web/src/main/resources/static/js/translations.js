@@ -16,6 +16,7 @@ function config($translateProvider) {
             //采购
             BUY_DASHBOARD:'采购管理面板',
             LIST_PRODUCTS:'浏览商品',
+            CART:'购物车',
             RUNNING_ORDERS:'待收货订单',
             FINISHED_ORDERS:'已完成订单',
 
@@ -60,6 +61,7 @@ function config($translateProvider) {
             //采购
             BUY_DASHBOARD:'采购管理面板',
             LIST_PRODUCTS:'浏览商品',
+            CART:'购物车',
             RUNNING_ORDERS:'待收货订单',
             FINISHED_ORDERS:'已完成订单',
 
@@ -104,6 +106,7 @@ function config($translateProvider) {
             //采购
             BUY_DASHBOARD:'采购管理面板',
             LIST_PRODUCTS:'浏览商品',
+            CART:'购物车',
             RUNNING_ORDERS:'待收货订单',
             FINISHED_ORDERS:'已完成订单',
 

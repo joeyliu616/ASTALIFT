@@ -1,54 +1,46 @@
 package com.aoe.astalift.account.entity;
 
-import org.hibernate.annotations.Generated;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
  * Created by joey on 16-3-11.
  */
 @Entity
+@Table
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String mobile;
-    private String email;
-    private String password;
+    private Integer id;
 
-    public Long getId() {
+    @ManyToOne
+    private UserGroup userGroup;
+
+    @OneToOne
+    private UserProfile userProfile;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getMobile() {
-        return mobile;
+    public UserGroup getUserGroup() {
+        return userGroup;
     }
 
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
+    public void setUserGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
     }
 
-    public String getEmail() {
-        return email;
+    public UserProfile getUserProfile() {
+        return userProfile;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

@@ -1,5 +1,6 @@
 package com.aoe.astalift.product.dto.util;
 
+import com.aoe.astalift.product.dto.ProductDetail;
 import com.aoe.astalift.product.dto.ProductInfo;
 import com.aoe.astalift.product.entity.Product;
 
@@ -13,6 +14,7 @@ public class ProductDtoUtil {
 
     public static ProductInfo createProductInfo(Product product){
         ProductInfo info = new ProductInfo();
+        info.setId(product.getId());
         info.setTitle(product.getTitle());
         info.setPrice(product.getPrice());
         info.setTitleImage(product.getTitleImage().getUrl());
@@ -26,5 +28,11 @@ public class ProductDtoUtil {
             productInfoList.add(createProductInfo(product));
         }
         return productInfoList;
+    }
+
+    public static ProductDetail createProductDetail(Product product) {
+        ProductDetail productDetail = new ProductDetail(createProductInfo(product));
+        //TODO add more
+        return productDetail;
     }
 }

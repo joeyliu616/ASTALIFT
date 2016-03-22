@@ -2,6 +2,7 @@ package com.aoe.astalift.web.controller;
 
 import com.aoe.astalift.common.dto.BaseResponse;
 import com.aoe.astalift.order.service.SellerOrderService;
+import com.aoe.astalift.web.annotation.SessionValidIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;

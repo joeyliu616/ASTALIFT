@@ -33,6 +33,5 @@ public class TestListProduct {
         Assert.notNull(productService);
         BaseResponse<List<ProductInfo>> baseResponse = productService.listProduct();
         System.out.println(objectMapper.writeValueAsString(baseResponse));
-
     }
 }

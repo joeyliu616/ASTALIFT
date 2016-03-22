@@ -5265,6 +5265,12 @@ del {
   width: 80px;
   background-color: #f8f8f9;
 }
+.cart-product-img-center{
+  height: 90px;
+  width: 90px;
+  vertical-align: middle;
+  background-color: #f8f8f9;
+}
 .product-imitation.xl {
   padding: 120px 0;
 }
