@@ -20,4 +20,10 @@ public interface CommonErrors {
         }
 
     }
+
+    class DataBaseError extends ErrorTemplate{
+        public DataBaseError() {
+            super(10002, "系统数据库错误");
+        }
+    }
 }

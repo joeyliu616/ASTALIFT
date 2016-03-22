@@ -1,6 +1,7 @@
 package com.aoe.astalift.account.service;
 
 import com.aoe.astalift.account.dto.AccountInfo;
+import com.aoe.astalift.account.dto.ProfileInfo;
 import com.aoe.astalift.common.dto.BaseResponse;
 
 /**

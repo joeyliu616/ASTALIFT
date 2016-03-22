@@ -10,6 +10,7 @@ import java.util.List;
  */
 @Entity
 public class Order implements Serializable{
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;

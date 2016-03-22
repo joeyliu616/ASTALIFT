@@ -10,6 +10,7 @@ import javax.persistence.Id;
  */
 @Entity
 public class OrderProduct {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;

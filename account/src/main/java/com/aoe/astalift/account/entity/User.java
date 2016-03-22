@@ -16,7 +16,7 @@ public class User implements Serializable {
     @ManyToOne
     private UserGroup userGroup;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private UserProfile userProfile;
 
     public Integer getId() {

@@ -13,6 +13,7 @@ import java.util.List;
  * Created by joey on 16-3-16.
  */
 public class OrderInfoDto implements Serializable {
+
     @JsonProperty
     private String id;
 
