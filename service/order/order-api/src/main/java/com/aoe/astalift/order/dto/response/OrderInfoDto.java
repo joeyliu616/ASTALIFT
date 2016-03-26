@@ -28,9 +28,18 @@ public class OrderInfoDto implements Serializable {
     @JsonProperty("customer")
     private String customerName;
 
+    @JsonProperty("supplier")
+    private String supplierName;
+
+    @JsonProperty("address")
+    private String address;
+
     //当前状态
     @JsonProperty
-    private Integer status;
+    private Integer statusCode;
+
+    @JsonProperty
+    private String statusDesc;
 
     @JsonSerialize(using = CustomDateSerializer.class)
     public Date getOrderDate() {
@@ -66,11 +75,36 @@ public class OrderInfoDto implements Serializable {
         this.customerName = customerName;
     }
 
-    public Integer getStatus() {
-        return status;
+
+    public Integer getStatusCode() {
+        return statusCode;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setStatusCode(Integer statusCode) {
+        this.statusCode = statusCode;
+    }
+
+    public String getStatusDesc() {
+        return statusDesc;
+    }
+
+    public void setStatusDesc(String statusDesc) {
+        this.statusDesc = statusDesc;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 }

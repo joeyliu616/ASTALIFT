@@ -29,12 +29,10 @@
                 <a href="index.html"><i class="fa fa-diamond"></i> <span class="nav-label">{{ 'SELL_DASHBOARD' | translate }}</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('sell')}">
                     <li ui-sref-active="active"><a ui-sref="sell.new">{{ 'NEW_TASK' | translate }}</a></li>
-                    <li ui-sref-active="active"><a ui-sref="sell.running">{{ 'RUNNING_TASK' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="sell.unfinished">{{ 'RUNNING_TASK' | translate }}</a></li>
                     <li ui-sref-active="active"><a ui-sref="sell.finished">{{ 'FINISHED_TASK' | translate }}</a></li>
                 </ul>
             </li>
-
-
 
             <li ng-class="{active: $state.includes('buy')}" ng-show="buy">
                 <a href=""><i class="fa fa-shopping-cart"></i> <span class="nav-label">{{ 'BUY_DASHBOARD' | translate }}</span><span class="fa arrow"></span></a>
@@ -46,7 +44,7 @@
                 </ul>
             </li>
 
-            <li ng-class="{active: $state.includes('mailbox')}">
+           <!-- <li ng-class="{active: $state.includes('mailbox')}">
                 <a ui-sref="inbox"><i class="fa fa-envelope"></i> <span class="nav-label">{{ 'MAILBOX' | translate }} </span><span class="label label-warning pull-right">16/24</span></a>
                 <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('mailbox')}">
                     <li ui-sref-active="active"><a ui-sref="mailbox.inbox">Inbox</a></li>
@@ -215,7 +213,7 @@
             </li>
             <li class="landing_link">
                 <a ui-sref="landing"><i class="fa fa-star"></i> <span class="nav-label">{{ 'LANDING' | translate }}</span> <span class="label label-warning pull-right">NEW</span></a>
-            </li>
+            </li>-->
         </ul>
 
     </div>

@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+import javax.persistence.*;
 
 /**
  * Created by joey on 16-3-18.

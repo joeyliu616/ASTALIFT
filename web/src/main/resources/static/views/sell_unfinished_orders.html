@@ -1,4 +1,4 @@
-<div class="wrapper wrapper-content animated fadeInRight" ng-controller="sellUnAcceptedOrdersCtrl">
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="sellUnFinishedOrdersCtrl">
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins">
@@ -13,6 +13,7 @@
                         <tr>
                             <th>订单编号</th>
                             <th>下单时间</th>
+                            <th>当前状态</th>
                             <th>订单总价</th>
                             <th>客户名称</th>
                             <th>收货地址</th>
@@ -23,12 +24,12 @@
                         <tr ng-repeat="item in items">
                             <td>{{item.id}}</td>
                             <td>{{item.date}}</td>
+                            <td>{{item.status}}</td>
                             <td>{{item.total | currency : "￥"}}</td>
                             <td>{{item.customer}}</td>
                             <td>{{item.address}}</td>
                             <td>
-                                <button class="btn btn-primary m-t-n-xs" ng-click="orderAction(item.id,'accept')"><i class="fa fa-check"></i> 接受并备货</button>
-                                <button class="btn btn-default m-t-n-xs" ng-click="orderAction(item.id,'cancel')"><i class="fa fa-check"></i> 拒绝</button>
+                                <button class="btn btn-primary m-t-n-xs" ng-click="orderAction(item.id,'finish')"><i class="fa fa-check"></i> 买家已付款</button>
                             </td>
                         </tr>
                         </tbody>

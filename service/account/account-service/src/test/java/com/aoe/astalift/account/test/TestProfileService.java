@@ -5,6 +5,7 @@ import com.aoe.astalift.account.entity.UserProfile;
 import com.aoe.astalift.account.repository.UserRepository;
 import com.aoe.astalift.account.service.ProfileService;
 import com.aoe.astalift.common.dto.BaseResponse;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.util.Assert;
 
@@ -22,6 +23,7 @@ public class TestProfileService extends TestTemplate {
     UserRepository userRepository;
 
     @Test
+    @Ignore
     public void foo(){
 
         Assert.notNull(userRepository);

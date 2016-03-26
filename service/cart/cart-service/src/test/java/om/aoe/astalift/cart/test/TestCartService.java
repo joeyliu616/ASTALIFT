@@ -1,10 +1,11 @@
 package om.aoe.astalift.cart.test;
 
 import com.aoe.astalift.cart.CartServiceConfigHook;
-import com.aoe.astalift.cart.entity.Cart;
-import com.aoe.astalift.cart.entity.CartItem;
+import com.aoe.astalift.cart.dto.Cart;
+import com.aoe.astalift.cart.dto.CartItem;
 import com.aoe.astalift.cart.service.CartService;
 import com.aoe.astalift.common.dto.BaseResponse;
+import com.aoe.astalift.product.ProductServiceConfigHook;
 import com.aoe.astalift.product.dto.ProductInfo;
 import com.aoe.astalift.product.service.ProductService;
 import org.junit.Test;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by joey on 16-3-18.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(CartServiceConfigHook.class)
+@SpringApplicationConfiguration({CartServiceConfigHook.class, ProductServiceConfigHook.class})
 public class TestCartService {
 
     @Resource

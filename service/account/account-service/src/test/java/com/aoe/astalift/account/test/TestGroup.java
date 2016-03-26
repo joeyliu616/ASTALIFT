@@ -1,14 +1,13 @@
 package com.aoe.astalift.account.test;
 
-import com.aoe.astalift.account.entity.User;
 import com.aoe.astalift.account.entity.UserGroup;
 import com.aoe.astalift.account.entity.UserRole;
 import com.aoe.astalift.account.repository.UserGroupRepository;
 import com.aoe.astalift.account.repository.UserRoleRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
@@ -26,6 +25,7 @@ public class TestGroup extends TestTemplate {
     UserRoleRepository userRoleRepository;
 
     @Test
+    @Ignore
     public void testAddGroup() throws JsonProcessingException {
         UserRole sell = userRoleRepository.findByName("sell");
         UserRole buy = userRoleRepository.findByName("buy");

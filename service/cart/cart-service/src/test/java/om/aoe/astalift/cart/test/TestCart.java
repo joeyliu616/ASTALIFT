@@ -1,8 +1,9 @@
 package om.aoe.astalift.cart.test;
 
 import com.aoe.astalift.cart.CartServiceConfigHook;
-import com.aoe.astalift.cart.entity.Cart;
-import com.aoe.astalift.cart.entity.CartItem;
+import com.aoe.astalift.cart.dto.Cart;
+import com.aoe.astalift.cart.dto.CartItem;
+import com.aoe.astalift.product.ProductServiceConfigHook;
 import com.aoe.astalift.product.dto.util.ProductDtoUtil;
 import com.aoe.astalift.product.entity.Product;
 import com.aoe.astalift.product.repository.ProductRepository;
@@ -10,7 +11,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -23,7 +23,7 @@ import java.util.List;
  * Created by joey on 16-3-18.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(CartServiceConfigHook.class)
+@SpringApplicationConfiguration({CartServiceConfigHook.class, ProductServiceConfigHook.class})
 public class TestCart {
 
     @Resource

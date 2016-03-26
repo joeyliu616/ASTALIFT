@@ -1,24 +1,21 @@
 package com.aoe.astalift.order.test;
 
-import com.aoe.astalift.order.OrderServiceConfigHook;
+import com.aoe.astalift.order.constants.OrderStatus;
+import com.aoe.astalift.order.util.OrderNoGenerator;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
-import java.util.logging.SimpleFormatter;
 
 /**
  * Created by joey on 16-3-16.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(OrderServiceConfigHook.class)
 public class Foo {
 
     private static Logger logger = LoggerFactory.getLogger(Foo.class);
@@ -32,6 +29,22 @@ public class Foo {
             String format = formatter.format(date);
             logger.info("==>"+format);
         }
+    }
+
+    @Test
+    public void testOrderNoGen(){
+        for (int i = 0; i < 200; i++) {
+            String sn = OrderNoGenerator.generate();
+            logger.debug(sn);
+        }
+
+    }
+
+
+    @Test
+    public void testOrderStatusDesc(){
+        String statusCodeDesc = OrderStatus.getStatusCodeDesc(1);
+        System.out.println(statusCodeDesc);
     }
 
     //产生过去30天的随机时间

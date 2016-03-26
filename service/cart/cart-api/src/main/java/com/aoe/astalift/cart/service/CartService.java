@@ -1,7 +1,7 @@
 package com.aoe.astalift.cart.service;
 
-import com.aoe.astalift.cart.entity.Cart;
-import com.aoe.astalift.cart.entity.CartItem;
+import com.aoe.astalift.cart.dto.Cart;
+import com.aoe.astalift.cart.dto.CartItem;
 import com.aoe.astalift.product.dto.ProductInfo;
 
 import java.util.List;

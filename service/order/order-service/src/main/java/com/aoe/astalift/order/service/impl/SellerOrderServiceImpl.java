@@ -1,7 +1,7 @@
 package com.aoe.astalift.order.service.impl;
 
 import com.aoe.astalift.common.dto.BaseResponse;
-import com.aoe.astalift.dto.dto.OrderInfoDto;
+import com.aoe.astalift.order.dto.response.OrderInfoDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class SellerOrderServiceImpl {
         for (int i = 0; i < 4; i++) {
             OrderInfoDto orderInfoDto = new OrderInfoDto();
             Date date = new Date();
-            orderInfoDto.setCompleteTime(date);
+            orderInfoDto.setOrderDate(new Date());
         }
         return null;
     }
@@ -32,15 +32,15 @@ public class SellerOrderServiceImpl {
         List<OrderInfoDto> list = new LinkedList<OrderInfoDto>();
         for (int i = 0; i < 20; i++) {
             OrderInfoDto orderInfoDto = new OrderInfoDto();
-            orderInfoDto.setId(new Integer(new Random().nextInt(1000)).toString());
-            orderInfoDto.setStatus(0);
+            //orderInfoDto.setId(new Integer(new Random().nextInt(1000)).toString());
+
             orderInfoDto.setOrderDate(createTime());
             if(i%3 == 0){
                 orderInfoDto.setCustomerName("张三");
-                orderInfoDto.setDeliverAddress("浦东新区陆家嘴环路1333号中国平安金融大厦");
+                //orderInfoDto.setDeliverAddress("浦东新区陆家嘴环路1333号中国平安金融大厦");
             }else{
                 orderInfoDto.setCustomerName("李四");
-                orderInfoDto.setDeliverAddress("上海市浦东新区陆家嘴银城中路600弄1-10号");
+                //orderInfoDto.setDeliverAddress("上海市浦东新区陆家嘴银城中路600弄1-10号");
             }
             List<String> contents = new LinkedList<String>();
             float total = 0;
@@ -57,7 +57,7 @@ public class SellerOrderServiceImpl {
                 total = (float) (21 * 68.00 * 0.75f);
                 contents.add(gls);
             }
-            orderInfoDto.setOrderContent(contents);
+            //orderInfoDto.setOrderContent(contents);
             orderInfoDto.setTotal(total);
             list.add(orderInfoDto);
         }

@@ -1,9 +1,9 @@
 package com.aoe.astalift.order.service;
 
 import com.aoe.astalift.common.dto.BaseResponse;
-import com.aoe.astalift.dto.dto.OrderDetail;
-import com.aoe.astalift.dto.dto.OrderInfoDto;
-import com.aoe.astalift.dto.dto.OrderItemDto;
+import com.aoe.astalift.order.dto.response.OrderDetail;
+import com.aoe.astalift.order.dto.response.OrderInfoDto;
+import com.aoe.astalift.order.dto.request.OrderItemDto;
 
 import java.util.List;
 
@@ -12,17 +12,19 @@ import java.util.List;
  */
 public interface BuyerShoppingService {
 
-    public BaseResponse<OrderInfoDto> orderProducts(List<OrderItemDto> orderItemDtos,
-                                                    Float total, Integer buyerId, Integer supplierId,
+    BaseResponse<OrderDetail> orderProducts(List<OrderItemDto> orderItemDtos,
+                                                    Integer buyerId, Integer supplierId,
                                                     String receiveAddress, String mobile);
 
-    BaseResponse<OrderInfoDto> confirmDelivered(String orderNo);
+    BaseResponse<OrderDetail> confirmDelivered(String orderNo);
 
-    BaseResponse<OrderInfoDto> cancelOrder(String orderNo, String msg);
+    BaseResponse<OrderDetail> cancelOrder(String orderNo, String msg);
 
     BaseResponse<OrderDetail> getOrderDetail(String orderNo);
 
     BaseResponse<List<OrderInfoDto>> listOrder(Integer buyerId);
 
+    BaseResponse<List<OrderInfoDto>> listUnfinishedOrder(Integer buyerId);
 
+    BaseResponse<List<OrderInfoDto>> listFinishedOrders(Integer buyerId);
 }

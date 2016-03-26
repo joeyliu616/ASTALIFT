@@ -28,7 +28,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
         })
         .state('sell.new', {
             url: "/new",
-            templateUrl: "views/new_orders.html",
+            templateUrl: "views/sell_unAccepted_orders.html",
             data: { pageTitle: '待处理订单' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
@@ -51,52 +51,51 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
-        .state('sell.running', {
-            url: "/dashboard_2",
-            templateUrl: "views/dashboard_2.html",
-            data: { pageTitle: 'Dashboard 2' },
+        .state('sell.unfinished', {
+            url: "/unfinished",
+            templateUrl: "views/sell_unfinished_orders.html",
+            data: { pageTitle: '运行中的订单' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
                         {
                             serie: true,
-                            name: 'angular-flot',
-                            files: [ 'js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
+                            files: ['js/plugins/dataTables/datatables.min.js','css/plugins/dataTables/datatables.min.css']
                         },
                         {
                             serie: true,
-                            files: ['js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js', 'js/plugins/jvectormap/jquery-jvectormap-2.0.2.css']
+                            name: 'datatables',
+                            files: ['js/plugins/dataTables/angular-datatables.min.js']
                         },
                         {
                             serie: true,
-                            files: ['js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js']
-                        },
-                        {
-                            name: 'ui.checkbox',
-                            files: ['js/bootstrap/angular-bootstrap-checkbox.js']
+                            name: 'datatables.buttons',
+                            files: ['js/plugins/dataTables/angular-datatables.buttons.min.js']
                         }
                     ]);
                 }
             }
         })
         .state('sell.finished', {
-            url: "/dashboard_3",
-            templateUrl: "views/dashboard_3.html",
-            data: { pageTitle: 'Dashboard 3' },
+            url: "/finished",
+            templateUrl: "views/sell_finished_orders.html",
+            data: { pageTitle: '已结束订单' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
                         {
-                            name: 'angles',
-                            files: ['js/plugins/chartJs/angles.js', 'js/plugins/chartJs/Chart.min.js']
+                            serie: true,
+                            files: ['js/plugins/dataTables/datatables.min.js','css/plugins/dataTables/datatables.min.css']
                         },
                         {
-                            name: 'angular-peity',
-                            files: ['js/plugins/peity/jquery.peity.min.js', 'js/plugins/peity/angular-peity.js']
+                            serie: true,
+                            name: 'datatables',
+                            files: ['js/plugins/dataTables/angular-datatables.min.js']
                         },
                         {
-                            name: 'ui.checkbox',
-                            files: ['js/bootstrap/angular-bootstrap-checkbox.js']
+                            serie: true,
+                            name: 'datatables.buttons',
+                            files: ['js/plugins/dataTables/angular-datatables.buttons.min.js']
                         }
                     ]);
                 }
@@ -201,36 +200,50 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
             }
         })
         .state('buy.running', {
-            url: "/rickshaw_chart",
-            templateUrl: "views/graph_rickshaw.html",
-            data: { pageTitle: 'Rickshaw chart' },
+            url: "/running",
+            templateUrl: "views/buy_running_orders.html",
+            data: { pageTitle: '待收货订单' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
                         {
-                            reconfig: true,
                             serie: true,
-                            files: ['js/plugins/rickshaw/vendor/d3.v3.js','js/plugins/rickshaw/rickshaw.min.js']
+                            files: ['js/plugins/dataTables/datatables.min.js','css/plugins/dataTables/datatables.min.css']
                         },
                         {
-                            reconfig: true,
-                            name: 'angular-rickshaw',
-                            files: ['js/plugins/rickshaw/angular-rickshaw.js']
+                            serie: true,
+                            name: 'datatables',
+                            files: ['js/plugins/dataTables/angular-datatables.min.js']
+                        },
+                        {
+                            serie: true,
+                            name: 'datatables.buttons',
+                            files: ['js/plugins/dataTables/angular-datatables.buttons.min.js']
                         }
                     ]);
                 }
             }
         })
         .state('buy.finished', {
-            url: "/peity_chart",
-            templateUrl: "views/graph_peity.html",
-            data: { pageTitle: 'Peity graphs' },
+            url: "/finished",
+            templateUrl: "views/buy_finished_orders.html",
+            data: { pageTitle: '已完成订单' },
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
                         {
-                            name: 'angular-peity',
-                            files: ['js/plugins/peity/jquery.peity.min.js', 'js/plugins/peity/angular-peity.js']
+                            serie: true,
+                            files: ['js/plugins/dataTables/datatables.min.js','css/plugins/dataTables/datatables.min.css']
+                        },
+                        {
+                            serie: true,
+                            name: 'datatables',
+                            files: ['js/plugins/dataTables/angular-datatables.min.js']
+                        },
+                        {
+                            serie: true,
+                            name: 'datatables.buttons',
+                            files: ['js/plugins/dataTables/angular-datatables.buttons.min.js']
                         }
                     ]);
                 }

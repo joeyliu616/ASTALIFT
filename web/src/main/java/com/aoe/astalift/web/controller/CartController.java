@@ -1,7 +1,7 @@
 package com.aoe.astalift.web.controller;
 
-import com.aoe.astalift.cart.entity.Cart;
-import com.aoe.astalift.cart.entity.CartItem;
+import com.aoe.astalift.cart.dto.Cart;
+import com.aoe.astalift.cart.dto.CartItem;
 import com.aoe.astalift.cart.service.CartService;
 import com.aoe.astalift.common.dto.BaseResponse;
 import com.aoe.astalift.common.dto.CommonErrors;

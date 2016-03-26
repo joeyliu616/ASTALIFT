@@ -1,5 +1,6 @@
 package com.aoe.astalift.account.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**

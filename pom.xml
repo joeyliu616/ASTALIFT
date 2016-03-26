@@ -9,11 +9,8 @@
     <version>1.0.0-SNAPSHOT</version>
     <modules>
         <module>web</module>
-        <module>account</module>
         <module>common</module>
-        <module>order</module>
-        <module>product</module>
-        <module>cart</module>
+        <module>service</module>
     </modules>
     <packaging>pom</packaging>
 

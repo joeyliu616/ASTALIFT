@@ -2,6 +2,7 @@ package com.aoe.astalift.account.test;
 
 import com.aoe.astalift.account.entity.UserRole;
 import com.aoe.astalift.account.repository.UserRoleRepository;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 
@@ -17,6 +18,7 @@ public class TestRole extends TestTemplate {
 
 
     @Test
+    @Ignore
     public void testSave(){
         UserRole sell = new UserRole();
         sell.setName("sell");

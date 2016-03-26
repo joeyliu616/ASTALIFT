@@ -12,7 +12,7 @@
                             <tbody>
                             <tr>
                                 <td width="90">
-                                    <img src="{{item.productInfo.titleImage}}">
+                                    <img ng-src="{{item.productInfo.titleImage}}">
                                 </td>
                                 <td class="desc">
                                     <h3>
@@ -69,7 +69,7 @@
                             </span>
                     <div class="m-t-sm">
                         <div class="btn-group">
-                            <a href="#" class="btn btn-primary btn-sm"><i class="fa fa-shopping-cart"></i> 确认下单</a>
+                            <a class="btn btn-primary btn-sm" ng-click="orderProducts(items)"><i class="fa fa-shopping-cart"></i> 确认下单</a>
                             <a href="#/buy/list" class="btn btn-white btn-sm">  我再逛逛</a>
                         </div>
                     </div>

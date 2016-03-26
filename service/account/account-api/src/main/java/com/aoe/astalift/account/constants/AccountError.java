@@ -26,4 +26,10 @@ public interface AccountError {
             super(20003, "用户不存在");
         }
     }
+
+    class PermissionDenied extends ErrorTemplate {
+        public PermissionDenied() {
+            super(20004, "没有权限访问该服务");
+        }
+    }
 }

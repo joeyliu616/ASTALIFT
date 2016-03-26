@@ -11,5 +11,12 @@
 
     <artifactId>cart-api</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.aoe.astalift</groupId>
+            <artifactId>product-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

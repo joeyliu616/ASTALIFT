@@ -1,9 +1,10 @@
 package com.aoe.astalift.order.service;
 
 import com.aoe.astalift.common.dto.BaseResponse;
-import com.aoe.astalift.dto.dto.DeliveryInfo;
-import com.aoe.astalift.dto.dto.OrderDetail;
-import com.aoe.astalift.dto.dto.OrderInfoDto;
+import com.aoe.astalift.order.dto.DeliveryInfo;
+import com.aoe.astalift.order.dto.request.OrderActionDto;
+import com.aoe.astalift.order.dto.response.OrderDetail;
+import com.aoe.astalift.order.dto.response.OrderInfoDto;
 
 import java.util.List;
 
@@ -12,15 +13,24 @@ import java.util.List;
  */
 public interface SupplierOrderProcessService {
 
-    BaseResponse<List<OrderInfoDto>> listOrderBySupplier(Integer supplierId);
+    BaseResponse<List<OrderInfoDto>> listOrder(Integer supplierId);
 
-    BaseResponse<List<OrderInfoDto>> listOrderByBuyer(Integer buyerId);
+    BaseResponse<List<OrderInfoDto>> listUnfinishedOrders(Integer supplierId);
+
+    BaseResponse<List<OrderInfoDto>> listUnAcceptedOrders(Integer supplierId);
+
+    BaseResponse<List<OrderInfoDto>> listFinishedOrders(Integer supplierId);
 
     BaseResponse<OrderDetail> getOrderDetail(String orderNo);
 
-    BaseResponse<OrderInfoDto> confirmOrder(String orderNo);
+    BaseResponse confirmOrder(String orderNo);
+
+    BaseResponse finishOrder(String orderNo);
 
     BaseResponse<OrderInfoDto> cancelOrder(String orderNo, String desc);
 
     BaseResponse<OrderInfoDto> setDeliveryInfo(String orderNo, DeliveryInfo deliveryInfo);
+
+
+
 }

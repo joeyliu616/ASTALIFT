@@ -2,6 +2,7 @@ package com.aoe.astalift.account.test;
 
 import com.aoe.astalift.account.entity.SignIn;
 import com.aoe.astalift.account.repository.SignInRepository;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.util.Assert;
@@ -18,6 +19,7 @@ public class TestSignIn extends TestTemplate {
     SignInRepository signInRepository;
 
     @Test
+    @Ignore
     public void addSignIn(){
         String userName = "joeyliu616";
         String mobile = "18566231281";

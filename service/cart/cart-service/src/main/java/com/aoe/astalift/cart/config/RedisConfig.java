@@ -1,15 +1,13 @@
 package com.aoe.astalift.cart.config;
 
-import com.aoe.astalift.cart.entity.Cart;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import com.aoe.astalift.cart.dto.Cart;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.util.Assert;
-
-import javax.annotation.Resource;
 
 /**
  * Created by joey on 16-3-17.

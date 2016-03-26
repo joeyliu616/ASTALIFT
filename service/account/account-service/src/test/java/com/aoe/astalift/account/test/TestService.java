@@ -3,6 +3,7 @@ package com.aoe.astalift.account.test;
 import com.aoe.astalift.account.dto.AccountInfo;
 import com.aoe.astalift.account.service.AccountService;
 import com.aoe.astalift.common.dto.BaseResponse;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.util.Assert;
 
@@ -16,6 +17,7 @@ public class TestService extends TestTemplate {
     AccountService accountService;
 
     @Test
+    @Ignore
     public void foo(){
         Assert.notNull(accountService);
 

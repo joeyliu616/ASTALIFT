@@ -1,7 +1,7 @@
 package com.aoe.astalift.cart.service.impl;
 
-import com.aoe.astalift.cart.entity.Cart;
-import com.aoe.astalift.cart.entity.CartItem;
+import com.aoe.astalift.cart.dto.Cart;
+import com.aoe.astalift.cart.dto.CartItem;
 import com.aoe.astalift.cart.service.CartService;
 import com.aoe.astalift.product.dto.ProductInfo;
 import org.slf4j.Logger;
@@ -32,6 +32,9 @@ public class CartServiceImpl implements CartService {
 
     public Cart getCart(Integer userId) {
         Cart cart = cartCache.opsForValue().get(userId);
+        if(null == cart){
+            return this.addCart(userId);
+        }
         return cart;
     }
 

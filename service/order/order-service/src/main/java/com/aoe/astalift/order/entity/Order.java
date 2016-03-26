@@ -27,9 +27,6 @@ public class Order implements Serializable {
     @Column(nullable = false)
     private Integer supplierId;
 
-    //供应方名称
-    @Column
-    private String supplierName;
 
     //采购方id
     @Column(nullable = false)
@@ -45,19 +42,20 @@ public class Order implements Serializable {
 
     //订单总额 根据OrderItems中的总和得出.
     @Column(nullable = false)
-    private Long total;
+    private Float total;
 
     //状态
     @Column(nullable = false)
     private Integer currentStatus;
 
-    @OneToMany
-    @JoinColumn(name="orderNo")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name="order_id")
+    @OrderBy(value = "createTime desc")
     private Set<OrderStatusHistory> orderStatusHistories;
 
     //订单详情. 采购了哪些产品，单价多少， 折扣多少, 总价多少
-    @OneToMany
-    @JoinColumn(name="orderNo")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @JoinColumn(name="order_id")
     private Set<OrderItem> orderItems;
 
     @CreationTimestamp
@@ -93,14 +91,6 @@ public class Order implements Serializable {
         this.supplierId = supplierId;
     }
 
-    public String getSupplierName() {
-        return supplierName;
-    }
-
-    public void setSupplierName(String supplierName) {
-        this.supplierName = supplierName;
-    }
-
     public Integer getBuyerId() {
         return buyerId;
     }
@@ -125,11 +115,11 @@ public class Order implements Serializable {
         this.receiveContact = receiveContact;
     }
 
-    public Long getTotal() {
+    public Float getTotal() {
         return total;
     }
 
-    public void setTotal(Long total) {
+    public void setTotal(Float total) {
         this.total = total;
     }
 

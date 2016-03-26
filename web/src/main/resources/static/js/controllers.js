@@ -3365,10 +3365,10 @@ function shoppingCartCtrl($scope, $http, $log, SweetAlert){
 
     $http.get('/buy/cart/list_all.json').then(
         function successCallback(responseData){
-            setItems(response.data);
+            setItems(responseData.data);
         },
-        function errorCallback(response){
-            handle403(response);
+        function errorCallback(responseData){
+            handle403(responseData);
         }
     );
 
@@ -3377,10 +3377,10 @@ function shoppingCartCtrl($scope, $http, $log, SweetAlert){
 
         $http.delete("/buy/cart/"+productId + ".json").then(
             function successCallback(responseData){
-                setItems(response.data);
+                setItems(responseData.data);
             },
-            function errorCallback(response){
-                handle403(response);
+            function errorCallback(responseData){
+                handle403(responseData);
             }
         );
     }
@@ -3395,8 +3395,8 @@ function shoppingCartCtrl($scope, $http, $log, SweetAlert){
                     type: "success"
                 });
             },
-            function errorCallback(response){
-                handle403(response);
+            function errorCallback(responseData){
+                handle403(responseData);
             }
         );
     }
@@ -3406,6 +3406,36 @@ function shoppingCartCtrl($scope, $http, $log, SweetAlert){
         angular.forEach($scope.items, function(item, key){
             $scope.sum += (item.productInfo.price * 0.8 * item.quantity);
         });
+    }
+
+    $scope.orderProducts = function(){
+
+        var orderItemDtoList = [];
+
+        angular.forEach($scope.items, function(item, key){
+            var orderItemDto = {};
+            orderItemDto.amount = item.quantity;
+            orderItemDto.productId = item.productInfo.id;
+            orderItemDto.orderPrice = item.productInfo.price;
+            orderItemDtoList.push(orderItemDto);
+        });
+
+        $log.log(JSON.stringify(orderItemDtoList));
+
+        $http.post("/buy/order",orderItemDtoList).then(
+            function successCallback(responseData){
+                if(responseData.data.code == 0){
+                    SweetAlert.swal({
+                        title: "成功!",
+                        text: "下单成功!",
+                        type: "success"
+                    });
+                }
+            },
+            function errorCallback(responseData){
+                handle403(responseData);
+            }
+        );
     }
 
 }
@@ -3431,7 +3461,234 @@ function loginCtrl($log, $http, $scope,$rootScope){
     }
 }
 
+function buyRunningOrdersCtrl($scope, DTOptionsBuilder, $http, $log){
 
+    $scope.items = [];
+
+
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withDOM('<"html5buttons"B>lTfgitp')
+        .withButtons([
+            {extend: 'copy'},
+            {extend: 'csv'},
+            {extend: 'excel'},
+            {extend: 'pdf'},
+
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+                    $(win.document.body).find('table')
+                        .addClass('compact')
+                        .css('font-size', 'inherit');
+                }
+            }
+        ]);
+
+
+    //load table
+    $http.get("/buy/unfinished_orders").then(
+        function successCallback(responseData){
+            $log.log(JSON.stringify(responseData));
+            $scope.items = handleOrderInfo(responseData);
+        },
+        function errorCallback(responseData){
+            handle403(responseData);
+        }
+    );
+}
+
+function buyFinishedOrdersCtrl($scope, DTOptionsBuilder, $http, $log){
+    $scope.items = [];
+
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withDOM('<"html5buttons"B>lTfgitp')
+        .withButtons([
+            {extend: 'copy'},
+            {extend: 'csv'},
+            {extend: 'excel'},
+            {extend: 'pdf'},
+
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+                    $(win.document.body).find('table')
+                        .addClass('compact')
+                        .css('font-size', 'inherit');
+                }
+            }
+        ]);
+
+    //load table
+    $http.get("/buy/finished_orders").then(
+        function successCallback(responseData){
+            $log.log(JSON.stringify(responseData));
+            $scope.items = handleOrderInfo(responseData);
+        },
+        function errorCallback(responseData){
+            handle403(responseData);
+        }
+    );
+}
+
+
+function sellUnAcceptedOrdersCtrl($scope, DTOptionsBuilder, $http, $log){
+
+    $scope.items = [];
+
+    function loadTable(){
+        //load table
+        $http.get("/sell/unAccepted_orders").then(
+            function successCallback(responseData){
+                $log.log(JSON.stringify(responseData));
+                $scope.items = handleOrderInfo(responseData);
+            },
+            function errorCallback(responseData){
+                handle403(responseData);
+            }
+        );
+    }
+
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withDOM('<"html5buttons"B>lTfgitp')
+        .withButtons([
+            {extend: 'copy'},
+            {extend: 'csv'},
+            {extend: 'excel'},
+            {extend: 'pdf'},
+
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+                    $(win.document.body).find('table')
+                        .addClass('compact')
+                        .css('font-size', 'inherit');
+                }
+            }]
+    );
+
+    $scope.orderAction = function (orderNo, actionType){
+        var orderAction = {
+            "actionType" : actionType
+        }
+        $http.put("/sell/order/"+orderNo, orderAction).then(
+
+            function successCallback(responseData){
+                $log.log(JSON.stringify(responseData));
+                if(responseData.data.code == 0){
+                    loadTable();
+                }
+            },
+
+            function errorCallback(responseData){
+                $log.log(JSON.stringify(responseData));
+                handle403(responseData);
+            }
+        );
+    }
+
+    loadTable();
+}
+
+
+function sellUnFinishedOrdersCtrl($scope, DTOptionsBuilder, $http, $log){
+    $scope.items = [];
+
+    function loadTable(){
+        //load table
+        $http.get("/sell/unFinished_orders").then(
+            function successCallback(responseData){
+                $log.log(JSON.stringify(responseData));
+                $scope.items = handleOrderInfo(responseData);
+            },
+            function errorCallback(responseData){
+                handle403(responseData);
+            }
+        );
+    }
+
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withDOM('<"html5buttons"B>lTfgitp')
+        .withButtons([
+            {extend: 'copy'},
+            {extend: 'csv'},
+            {extend: 'excel'},
+            {extend: 'pdf'},
+
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+                    $(win.document.body).find('table')
+                        .addClass('compact')
+                        .css('font-size', 'inherit');
+                }
+            }]
+    );
+
+    $scope.orderAction = function (orderNo, actionType){
+        var orderAction = {
+            "actionType" : actionType
+        }
+        $http.put("/sell/order/"+orderNo, orderAction).then(
+
+            function successCallback(responseData){
+                $log.log(JSON.stringify(responseData));
+                if(responseData.data.code == 0){
+                    loadTable();
+                }
+            },
+
+            function errorCallback(responseData){
+                $log.log(JSON.stringify(responseData));
+                handle403(responseData);
+            }
+        );
+    }
+
+    loadTable();
+}
+
+
+function sellFinishedOrdersCtrl($scope, DTOptionsBuilder, $http, $log){
+    $scope.items = [];
+
+    function loadTable(){
+        //load table
+        $http.get("/sell/finished_orders").then(
+            function successCallback(responseData){
+                $log.log(JSON.stringify(responseData));
+                $scope.items = handleOrderInfo(responseData);
+            },
+            function errorCallback(responseData){
+                handle403(responseData);
+            }
+        );
+    }
+
+    $scope.dtOptions = DTOptionsBuilder.newOptions()
+        .withDOM('<"html5buttons"B>lTfgitp')
+        .withButtons([
+            {extend: 'copy'},
+            {extend: 'csv'},
+            {extend: 'excel'},
+            {extend: 'pdf'},
+
+            {extend: 'print',
+                customize: function (win){
+                    $(win.document.body).addClass('white-bg');
+                    $(win.document.body).css('font-size', '10px');
+                    $(win.document.body).find('table')
+                        .addClass('compact')
+                        .css('font-size', 'inherit');
+                }
+            }]
+    );
+
+    loadTable();
+}
 
 function navCtrl($scope, $http, $log){
     $log.log("load ui menu");
@@ -3463,6 +3720,26 @@ function handle403(response){
     if(response.status == 403){
         window.location.href = "/index.html#/login";
     }
+}
+
+function handleOrderInfo(responseData){
+    var items = [];
+    if(responseData.data.code == 0){
+        angular.forEach(responseData.data.data, function (orderInfo, key){
+            var item = {"id":"","date":"","total":0, "address":"","customer":"", "status":""};
+            item.id = orderInfo.orderNo;
+            item.date = orderInfo.orderDate;
+            item.total = orderInfo.total;
+            item.address = orderInfo.address;
+            item.customer = orderInfo.customer;
+            item.status = orderInfo.statusDesc + "";
+            items.push(item);
+        });
+    }else{
+        //TODO
+        alert("error")
+    }
+    return items;
 }
 
 /**
@@ -3512,5 +3789,10 @@ angular
     .controller('productListCtrl',productListCtrl)
     .controller('shoppingCartCtrl',shoppingCartCtrl)
     .controller('loginCtrl', loginCtrl)
+    .controller('buyRunningOrdersCtrl',buyRunningOrdersCtrl)
+    .controller('buyFinishedOrdersCtrl',buyFinishedOrdersCtrl)
+    .controller('sellUnAcceptedOrdersCtrl',sellUnAcceptedOrdersCtrl)
+    .controller('sellUnFinishedOrdersCtrl',sellUnFinishedOrdersCtrl)
+    .controller('sellFinishedOrdersCtrl',sellFinishedOrdersCtrl)
     .controller('navCtrl',navCtrl);
 

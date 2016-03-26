@@ -20,6 +20,10 @@ public class OrderStatusHistory implements Serializable {
     @Column
     private Integer status;
 
+    //状态变更原因
+    @Column(name="c_desc")
+    private String desc;
+
     @CreationTimestamp
     private Date createTime;
 
@@ -45,5 +49,13 @@ public class OrderStatusHistory implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

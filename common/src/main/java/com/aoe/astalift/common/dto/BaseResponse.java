@@ -4,6 +4,7 @@ package com.aoe.astalift.common.dto;
  * Created by joey on 16-3-11.
  */
 public class BaseResponse<T> {
+
     private Integer code;
     private String msg;
     private T data;
