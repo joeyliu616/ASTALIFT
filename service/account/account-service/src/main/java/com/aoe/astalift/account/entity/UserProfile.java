@@ -12,7 +12,7 @@ import java.util.Date;
  * Created by joey on 16-3-18.
  */
 @Entity
-@Table
+@Table(name="t_user_profile")
 public class UserProfile implements Serializable {
 
     @Id

@@ -11,7 +11,7 @@ import java.util.Date;
  * Created by joey on 16-3-7.
  */
 @Entity
-@Table
+@Table(name="t_user_role")
 public class UserRole implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

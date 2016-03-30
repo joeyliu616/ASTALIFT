@@ -12,7 +12,7 @@ import javax.persistence.*;
  * Created by joey on 16-3-18.
  */
 @Entity
-@Table
+@Table(name="t_user_group")
 public class UserGroup implements Serializable {
 
     @Id

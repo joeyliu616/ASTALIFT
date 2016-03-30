@@ -8,7 +8,7 @@ import java.util.Set;
  * Created by joey on 16-3-16.
  */
 @Entity
-@Table
+@Table(name="t_product")
 public class Product implements Serializable {
 
     @Id

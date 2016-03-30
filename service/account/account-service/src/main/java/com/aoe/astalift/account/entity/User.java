@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Created by joey on 16-3-11.
  */
 @Entity
-@Table
+@Table(name="t_user")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

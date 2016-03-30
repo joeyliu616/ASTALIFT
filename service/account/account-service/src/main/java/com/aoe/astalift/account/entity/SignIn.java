@@ -11,7 +11,7 @@ import java.util.Date;
  * Created by joey on 16-3-18.
  */
 @Entity
-@Table
+@Table(name="t_signin")
 public class SignIn implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

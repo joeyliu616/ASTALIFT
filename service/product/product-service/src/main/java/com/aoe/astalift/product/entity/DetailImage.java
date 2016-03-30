@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by joey on 16-3-16.
  */
 @Entity
-@Table
+@Table(name="t_product_detail_image")
 public class DetailImage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

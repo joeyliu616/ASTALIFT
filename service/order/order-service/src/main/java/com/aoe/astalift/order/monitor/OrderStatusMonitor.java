@@ -29,7 +29,7 @@ public class OrderStatusMonitor {
     @Resource
     OrderRepository orderRepository;
 
-    @Scheduled(fixedRate=5000)
+   // @Scheduled(fixedRate=5000)
     public void autoFinishJob(){
         logger.debug("定时任务： autoFinishJob ");
         List<Integer> autoFinishStatus = new ArrayList<Integer>();

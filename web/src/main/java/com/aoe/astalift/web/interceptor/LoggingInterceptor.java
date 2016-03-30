@@ -61,7 +61,8 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
                                 Object handler, Exception ex) throws Exception {
         Long endTime = System.currentTimeMillis();
         Long useTime = endTime - (Long) request.getAttribute("start-time");
-        logger.info("controller:{} ip:{}, params:{}, use time:{}ms", request.getRequestURI(),
+        logger.info("uri:{} method: {}, ip:{}, params:{}, use time:{}ms", request.getRequestURI(),
+                request.getMethod(),
                 getIpAddr(request), getRequestMap(request), useTime);
         super.afterCompletion(request, response, handler, ex);
     }

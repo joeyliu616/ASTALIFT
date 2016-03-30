@@ -14,11 +14,11 @@
 
     <dependencies>
 
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>com.aoe.astalift</groupId>
@@ -87,6 +87,16 @@
             <version>18.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!-- database migrations -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
     </dependencies>
 
 
@@ -99,10 +109,6 @@
             <resource>
                 <directory>src/main/resources/config/</directory>
                 <targetPath>${project.build.directory}/</targetPath>
-            </resource>
-            <resource>
-                <directory>src/main/resources/static/</directory>
-                <targetPath>${project.build.directory}/static</targetPath>
             </resource>
         </resources>
 
@@ -148,6 +154,27 @@
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>
                 </configuration>
+            </plugin>
+
+            <!-- 为了发布更方便可靠,使用全部目录打包成zip发布 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.1</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/resources/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

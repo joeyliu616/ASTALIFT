@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by joey on 16-3-16.
  */
 @Entity
-@Table
+@Table(name="t_product_title_image")
 public class TitleImage implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
