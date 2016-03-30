@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -38,7 +40,9 @@ public class AuthController {
 
     @RequestMapping(value = "/auth/login", method = RequestMethod.POST)
     @SessionValidIgnore
-    public BaseResponse<AccountInfo> login(@RequestBody LoginDto loginDto,HttpSession session) {
+    public BaseResponse<AccountInfo> login(
+            HttpServletResponse response,
+            @RequestBody LoginDto loginDto,HttpSession session) {
 
         if(null == loginDto || null == loginDto.getSingInString() || null == loginDto.getPassword()){
             return new BaseResponse(new CommonErrors.NoNullError());
@@ -48,6 +52,11 @@ public class AuthController {
             session.setAttribute("user_id", infoBaseResponse.getData().getUserId());
             String sessionKey = sessionService.saveUserSessionKey(infoBaseResponse.getData().getUserId());
             session.setAttribute(SessionConstants.SESSION_KEY, sessionKey);
+            infoBaseResponse.getData().setSessionKey(sessionKey);
+            Cookie authedCookie = new Cookie("session_key",sessionKey);
+            authedCookie.setPath("/");
+            response.addCookie(authedCookie);
+            logger.info("session {}, set session key {} user {}", session.getId(),sessionKey, infoBaseResponse.getData().getUserId());
         }
         return infoBaseResponse;
     }

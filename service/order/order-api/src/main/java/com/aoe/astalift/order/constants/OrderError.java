@@ -35,4 +35,10 @@ public interface OrderError {
         }
     }
 
+    class StatusError extends  ErrorTemplate {
+        public StatusError(){
+            super(30006, "无法变更到指定订单状态");
+        }
+    }
+
 }

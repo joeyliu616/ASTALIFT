@@ -1,6 +1,8 @@
 package com.aoe.astalift.order.dto.response;
 
+import com.aoe.astalift.order.dto.util.CustomDateSerializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -33,6 +35,7 @@ public class OrderHistoryDto implements Serializable{
         this.desc = desc;
     }
 
+    @JsonSerialize(using = CustomDateSerializer.class)
     public Date getCreateTime() {
         return createTime;
     }

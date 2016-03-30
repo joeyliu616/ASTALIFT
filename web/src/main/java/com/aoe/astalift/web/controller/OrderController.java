@@ -2,26 +2,36 @@ package com.aoe.astalift.web.controller;
 
 import com.aoe.astalift.account.constants.AccountError;
 import com.aoe.astalift.account.dto.AccountInfo;
+import com.aoe.astalift.account.dto.ProfileInfo;
 import com.aoe.astalift.account.service.AccountService;
 import com.aoe.astalift.account.service.ProfileService;
 import com.aoe.astalift.cart.service.CartService;
 import com.aoe.astalift.common.dto.BaseResponse;
 import com.aoe.astalift.common.dto.CommonErrors;
 import com.aoe.astalift.common.dto.ResponseUtil;
+import com.aoe.astalift.order.constants.OrderStatus;
 import com.aoe.astalift.order.dto.request.OrderActionDto;
 import com.aoe.astalift.order.dto.request.OrderItemDto;
+import com.aoe.astalift.order.dto.response.OrderDetail;
 import com.aoe.astalift.order.dto.response.OrderInfoDto;
+import com.aoe.astalift.order.entity.Order;
 import com.aoe.astalift.order.service.BuyerShoppingService;
+import com.aoe.astalift.order.service.OrderService;
 import com.aoe.astalift.order.service.SupplierOrderProcessService;
+import com.aoe.astalift.web.annotation.SessionValidIgnore;
 import com.aoe.astalift.web.constants.SessionConstants;
 import com.aoe.astalift.web.service.SessionService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Strings;
+import com.google.common.primitives.Booleans;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by joey on 16-3-16.
@@ -49,8 +59,21 @@ public class OrderController {
     @Resource
     SupplierOrderProcessService supplierOrderProcessService;
 
-    @RequestMapping(value = "/buy/order",method = RequestMethod.POST)
-    BaseResponse orderProducts(HttpSession httpSession, @RequestBody List<OrderItemDto> orderItemDtoList){
+    @Resource
+    OrderService orderService;
+
+    @Resource
+    ObjectMapper objectMapper;
+
+    @RequestMapping(value = "/order/{orderNo}", method = RequestMethod.GET)
+    BaseResponse getDetail(@PathVariable String orderNo, HttpSession session){
+        String sessionKey = (String) session.getAttribute(SessionConstants.SESSION_KEY);
+        Integer userId = sessionService.getUserId(sessionKey);
+        return orderService.getOrderDetail(orderNo);
+    }
+
+    @RequestMapping(value = "/order", method = RequestMethod.POST)
+    BaseResponse addOrder(@RequestBody List<OrderItemDto> orderItemDtoList, HttpSession httpSession){
         String sessionKey = (String) httpSession.getAttribute(SessionConstants.SESSION_KEY);
         Integer userId = sessionService.getUserId(sessionKey);
         Integer supplierId = null;
@@ -62,84 +85,144 @@ public class OrderController {
         }
         String address = profileService.getUserProfile(userId).getData().getAddress();
         String mobile = profileService.getUserProfile(userId).getData().getMobile();
-        return buyerShoppingService.orderProducts(orderItemDtoList,userId,supplierId,address,mobile);
+        return buyerShoppingService.orderProducts(orderItemDtoList, userId, supplierId, address, mobile);
     }
 
 
-    @RequestMapping(value = "/buy/unfinished_orders",method = RequestMethod.GET)
-    BaseResponse buyerUnfinishedOrders(HttpSession httpSession){
+    // 修改订单状态
+    @RequestMapping(value = "/order/{orderNo}", method = RequestMethod.PUT)
+    public BaseResponse orderStatus(
+            HttpSession httpSession,
+            @PathVariable String orderNo,
+            @RequestBody OrderActionDto orderAction)
+    {
+
         String sessionKey = (String) httpSession.getAttribute(SessionConstants.SESSION_KEY);
         Integer userId = sessionService.getUserId(sessionKey);
-        if(!checkRole(userId,"buy")){
-            return new BaseResponse(new AccountError.PermissionDenied());
-        }
-        //load 订单
-        BaseResponse<List<OrderInfoDto>> listBaseResponse = buyerShoppingService.listUnfinishedOrder(userId);
-        if(listBaseResponse.getCode() == 0){
-            cartService.deleteUserCart(userId);
-        }
-        return listBaseResponse;
-    }
+        BaseResponse<OrderDetail> detailBaseResponse = orderService.getOrderDetail(orderNo);
+        OrderDetail orderDetail = detailBaseResponse.getData();
+        logger.debug("userId {}, orderId {}, currentStatus {}, actionType",userId,orderNo,detailBaseResponse.getData().getStatusDesc(),orderAction.getActionType());
 
-    @RequestMapping(value = "/buy/finished_orders",method = RequestMethod.GET)
-    BaseResponse buyerFinishedOrders(HttpSession httpSession){
-        String sessionKey = (String) httpSession.getAttribute(SessionConstants.SESSION_KEY);
-        Integer userId = sessionService.getUserId(sessionKey);
-        if(!checkRole(userId,"buy")){
-            return new BaseResponse(new AccountError.PermissionDenied());
+        if(!ResponseUtil.isResponseSuccess(detailBaseResponse)){
+            return detailBaseResponse;
         }
-        return buyerShoppingService.listFinishedOrders(userId);
-    }
-
-
-    @RequestMapping(value = "/sell/unAccepted_orders",method = RequestMethod.GET)
-    public BaseResponse sellerUnAcceptedOrders(HttpSession httpSession){
-        String sessionKey = (String) httpSession.getAttribute(SessionConstants.SESSION_KEY);
-        Integer userId = sessionService.getUserId(sessionKey);
-        if(!checkRole(userId,"sell")){
-            return new BaseResponse(new AccountError.PermissionDenied());
+        BaseResponse<AccountInfo> accountInfoResponse = accountService.getAccountInfo(userId);
+        if(!ResponseUtil.isResponseSuccess(accountInfoResponse)){
+            return accountInfoResponse;
         }
 
-        return supplierOrderProcessService.listUnAcceptedOrders(userId);
-    }
+        AccountInfo accountInfo = accountInfoResponse.getData();
+        List<String> roles = accountInfo.getRoles();
 
-    @RequestMapping(value = "/sell/unFinished_orders", method = RequestMethod.GET)
-    public BaseResponse sellerUnfinishedOrders(HttpSession httpSession){
-        String sessionKey = (String) httpSession.getAttribute(SessionConstants.SESSION_KEY);
-        Integer userId = sessionService.getUserId(sessionKey);
-        if(!checkRole(userId,"sell")){
-            return new BaseResponse(new AccountError.PermissionDenied());
+        Boolean asBuyer = null;
+        Boolean asSeller = null;
+
+        if(0 == orderDetail.getCustomerName().compareTo(accountInfo.getUserName())){
+            asBuyer = new Boolean(true);
+            asSeller = new Boolean(false);
         }
-        return supplierOrderProcessService.listUnfinishedOrders(userId);
-    }
 
-
-    @RequestMapping(value = "/sell/finished_orders", method = RequestMethod.GET)
-    public BaseResponse sellerFinishedOrders(HttpSession httpSession){
-        String sessionKey = (String) httpSession.getAttribute(SessionConstants.SESSION_KEY);
-        Integer userId = sessionService.getUserId(sessionKey);
-        if(!checkRole(userId,"sell")){
-            return new BaseResponse(new AccountError.PermissionDenied());
+        if(0 == orderDetail.getSupplierName().compareTo(accountInfo.getUserName())){
+            asSeller = new Boolean(true);
+            asBuyer = new Boolean(false);
         }
-        return supplierOrderProcessService.listFinishedOrders(userId);
-    }
 
-    @RequestMapping(value = "/sell/order/{orderNo}", method = RequestMethod.PUT)
-    public BaseResponse orderStatus(HttpSession httpSession,@PathVariable String orderNo, @RequestBody OrderActionDto orderAction){
-        String sessionKey = (String) httpSession.getAttribute(SessionConstants.SESSION_KEY);
-        Integer userId = sessionService.getUserId(sessionKey);
+        if(null== asBuyer && null == asSeller){
+            logger.error("orderId {}, userId {} 既不是买家， 也不是卖家", orderNo,userId);
+        }
+
 
         switch (orderAction.getActionType()){
             case "accept":
-                return supplierOrderProcessService.confirmOrder(orderNo);
+                if(asSeller == false){
+                    return new BaseResponse(new AccountError.InvalidUserRole());
+                }
+                return orderService.setOrderStatus(orderNo, OrderStatus.CONFIRM, "供应方完成备货,等待买方付款");
             case "cancel":
-                return supplierOrderProcessService.cancelOrder(orderNo, "货源不足， 卖家取消订单");
-            case "finish":
-                return supplierOrderProcessService.finishOrder(orderNo);
+                if(asSeller == false){
+                    return new BaseResponse(new AccountError.InvalidUserRole());
+                }
+                return orderService.setOrderStatus(orderNo, OrderStatus.REFUSE, "货源不足， 卖家取消订单");
+            case "paid":
+                if(asSeller == false){
+                    return new BaseResponse(new AccountError.InvalidUserRole());
+                }
+                return orderService.setOrderStatus(orderNo,OrderStatus.PAID,"供应方已收到全部货款");
+            case "deliver":
+                if(asSeller == false){
+                    return new BaseResponse(new AccountError.InvalidUserRole());
+                }
+                return orderService.setOrderStatus(orderNo,OrderStatus.DELIVERING,"已发货, 承运公司: "+orderAction.getDeliveryInfo().getCompany() +", 运单号：" +orderAction.getDeliveryInfo().getDeliveryNo());
+            case "receive":
+                if(asBuyer == false){
+                    return new BaseResponse(new AccountError.InvalidUserRole());
+                }
+                return orderService.setOrderStatus(orderNo,OrderStatus.RECEIVED,"买家已收货");
             default:
                 return new BaseResponse(new CommonErrors.UnknownError());
         }
 
+    }
+
+    @RequestMapping(value = "/orders", method = RequestMethod.GET)
+    public BaseResponse<List<OrderInfoDto>> listOrder(HttpSession httpSession,
+                                        @RequestParam("status") Integer orderStatus,@RequestParam(value = "role",required = false) String asRole)
+    {
+        String sessionKey = (String) httpSession.getAttribute(SessionConstants.SESSION_KEY);
+        Integer userId = sessionService.getUserId(sessionKey);
+        AccountInfo accountInfo = accountService.getAccountInfo(userId).getData();
+        if(null == accountInfo){
+            logger.error("数据库中无法获取账号信息， userId {}",userId);
+            return new BaseResponse<List<OrderInfoDto>>(new CommonErrors.UnknownError());
+        }
+        logger.debug("userId {} status {}",userId,orderStatus);
+
+        List<OrderInfoDto> orders = new ArrayList<>();
+        List<String> roles = accountInfo.getRoles();
+        //排除重复
+        Map<String,OrderInfoDto> orderMap = new HashMap<>();
+
+        for (String role : roles) {
+
+            if(null != asRole && false == asRole.equals(role)){
+                continue;
+            }
+
+            if(role.equals("buy")){
+
+                BaseResponse<List<OrderInfoDto>> listBaseResponse = new BaseResponse<>();
+                if(orderStatus != 0){
+                    listBaseResponse = buyerShoppingService.listOrder(userId, orderStatus);
+                }else{
+                    listBaseResponse = buyerShoppingService.listUnfinishedOrder(userId);
+                }
+
+                List<OrderInfoDto> data = listBaseResponse.getData();
+                for (OrderInfoDto orderInfoDto : data) {
+
+                    if(null == orderMap.get(orderInfoDto.getOrderNo())){
+                        orderMap.put(orderInfoDto.getOrderNo(),orderInfoDto);
+                    }
+                }
+            }
+
+            if(role.equals("sell")){
+                BaseResponse<List<OrderInfoDto>> listBaseResponse = new BaseResponse<>();
+                if(orderStatus != 0){
+                    listBaseResponse = supplierOrderProcessService.listOrder(userId, orderStatus);
+                } else{
+                    listBaseResponse = supplierOrderProcessService.listUnfinishedOrders(userId);
+                }
+                List<OrderInfoDto> data = listBaseResponse.getData();
+                for (OrderInfoDto orderInfoDto : data) {
+                    if(null == orderMap.get(orderInfoDto.getOrderNo())){
+                        orderMap.put(orderInfoDto.getOrderNo(),orderInfoDto);
+                    }
+                }
+            }
+        }
+
+        return new BaseResponse<List<OrderInfoDto>>(new ArrayList<>(orderMap.values()));
     }
 
 

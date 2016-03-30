@@ -14,6 +14,7 @@ import java.util.List;
 public interface SupplierOrderProcessService {
 
     BaseResponse<List<OrderInfoDto>> listOrder(Integer supplierId);
+    BaseResponse<List<OrderInfoDto>> listOrder(Integer supplierId,Integer statusCode);
 
     BaseResponse<List<OrderInfoDto>> listUnfinishedOrders(Integer supplierId);
 

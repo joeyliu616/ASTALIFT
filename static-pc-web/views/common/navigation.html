@@ -1,0 +1,49 @@
+<nav class="navbar-default navbar-static-side" role="navigation" ng-controller="navCtrl">
+    <div class="sidebar-collapse">
+        <ul side-navigation class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+
+                <div class="profile-element" uib-dropdown>
+                    <img alt="image" class="img-circle" src="img/profile_small.jpg"/>
+                    <a uib-dropdown-toggle href>
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold">David Williams</strong>
+                             </span>
+                                <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
+                            </span>
+                    </a>
+                    <ul uib-dropdown-menu class="animated fadeInRight m-t-xs">
+                        <li><a ui-sref="app.profile">Profile</a></li>
+                        <li><a ui-sref="app.contacts">Contacts</a></li>
+                        <li><a ui-sref="mailbox.inbox">Mailbox</a></li>
+                        <li class="divider"></li>
+                        <li><a ui-sref="login">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    IN+
+                </div>
+            </li>
+            <li ng-class="{active: $state.includes('sell')}" ng-show="sell">
+                <a href="index.html"><i class="fa fa-diamond"></i> <span class="nav-label">{{ 'SELL_DASHBOARD' | translate }}</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('sell')}">
+                    <li ui-sref-active="active"><a ui-sref="sell.new">{{ 'NEW_TASK' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="sell.unfinished">{{ 'RUNNING_TASK' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="sell.finished">{{ 'FINISHED_TASK' | translate }}</a></li>
+                </ul>
+            </li>
+
+            <li ng-class="{active: $state.includes('buy')}" ng-show="buy">
+                <a href=""><i class="fa fa-shopping-cart"></i> <span class="nav-label">{{ 'BUY_DASHBOARD' | translate }}</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('buy')}">
+                    <li ui-sref-active="active"><a ui-sref="buy.list">{{'LIST_PRODUCTS' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="buy.cart">{{'CART' | translate }}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="buy.running">{{'RUNNING_ORDERS' | translate}}</a></li>
+                    <li ui-sref-active="active"><a ui-sref="buy.finished">{{'FINISHED_ORDERS' | translate}}</a></li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+</nav>

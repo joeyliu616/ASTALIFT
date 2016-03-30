@@ -27,6 +27,12 @@ public interface AccountError {
         }
     }
 
+    class InvalidUserRole extends ErrorTemplate {
+        public InvalidUserRole() {
+            super(20004, "用户角色不存在");
+        }
+    }
+
     class PermissionDenied extends ErrorTemplate {
         public PermissionDenied() {
             super(20004, "没有权限访问该服务");

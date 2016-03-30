@@ -19,4 +19,5 @@ public interface OrderRepository extends JpaRepository<Order,Integer>{
     List<Order> findBySupplierIdAndCurrentStatusNotIn(Integer supperId, Collection<Integer> statusCollection);
     List<Order> findByBuyerIdAndCurrentStatusNotIn(Integer buyerId, Collection<Integer> statusCollection);
     List<Order> findByBuyerIdAndCurrentStatus(Integer buyerId, Integer currentStatus);
+    List<Order> findByCurrentStatusIn(Collection<Integer> statusCollection);
 }

@@ -12,7 +12,7 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
     IdleProvider.idle(5); // in seconds
     IdleProvider.timeout(120); // in seconds
 
-    $urlRouterProvider.otherwise("/sell/new");
+    $urlRouterProvider.otherwise("/widgets");
 
     $ocLazyLoadProvider.config({
         // Set to true if you want to see what and when is dynamically loaded
@@ -20,146 +20,12 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
     });
 
     $stateProvider
-
-        .state('sell', {
+        .state('product', {
             abstract: true,
-            url: "/sell",
-            templateUrl: "views/common/content.html",
-        })
-        .state('sell.new', {
-            url: "/new",
-            templateUrl: "views/sell_unAccepted_orders.html",
-            data: { pageTitle: '待处理订单' },
-            resolve: {
-                loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
-                        {
-                            serie: true,
-                            files: ['js/plugins/dataTables/datatables.min.js','css/plugins/dataTables/datatables.min.css']
-                        },
-                        {
-                            serie: true,
-                            name: 'datatables',
-                            files: ['js/plugins/dataTables/angular-datatables.min.js']
-                        },
-                        {
-                            serie: true,
-                            name: 'datatables.buttons',
-                            files: ['js/plugins/dataTables/angular-datatables.buttons.min.js']
-                        }
-                    ]);
-                }
-            }
-        })
-        .state('sell.unfinished', {
-            url: "/unfinished",
-            templateUrl: "views/sell_unfinished_orders.html",
-            data: { pageTitle: '运行中的订单' },
-            resolve: {
-                loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
-                        {
-                            serie: true,
-                            files: ['js/plugins/dataTables/datatables.min.js','css/plugins/dataTables/datatables.min.css']
-                        },
-                        {
-                            serie: true,
-                            name: 'datatables',
-                            files: ['js/plugins/dataTables/angular-datatables.min.js']
-                        },
-                        {
-                            serie: true,
-                            name: 'datatables.buttons',
-                            files: ['js/plugins/dataTables/angular-datatables.buttons.min.js']
-                        }
-                    ]);
-                }
-            }
-        })
-        .state('sell.finished', {
-            url: "/finished",
-            templateUrl: "views/sell_finished_orders.html",
-            data: { pageTitle: '已结束订单' },
-            resolve: {
-                loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
-                        {
-                            serie: true,
-                            files: ['js/plugins/dataTables/datatables.min.js','css/plugins/dataTables/datatables.min.css']
-                        },
-                        {
-                            serie: true,
-                            name: 'datatables',
-                            files: ['js/plugins/dataTables/angular-datatables.min.js']
-                        },
-                        {
-                            serie: true,
-                            name: 'datatables.buttons',
-                            files: ['js/plugins/dataTables/angular-datatables.buttons.min.js']
-                        }
-                    ]);
-                }
-            }
-        })
-        .state('dashboards_top', {
-            abstract: true,
-            url: "/dashboards_top",
-            templateUrl: "views/common/content_top_navigation.html",
-        })
-        .state('dashboards_top.dashboard_4', {
-            url: "/dashboard_4",
-            templateUrl: "views/dashboard_4.html",
-            data: { pageTitle: 'Dashboard 4' },
-            resolve: {
-                loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
-                        {
-                            name: 'angles',
-                            files: ['js/plugins/chartJs/angles.js', 'js/plugins/chartJs/Chart.min.js']
-                        },
-                        {
-                            name: 'angular-peity',
-                            files: ['js/plugins/peity/jquery.peity.min.js', 'js/plugins/peity/angular-peity.js']
-                        },
-                        {
-                            serie: true,
-                            name: 'angular-flot',
-                            files: [ 'js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
-                        }
-                    ]);
-                }
-            }
-        })
-        .state('dashboards.dashboard_4_1', {
-            url: "/dashboard_4_1",
-            templateUrl: "views/dashboard_4_1.html",
-            data: { pageTitle: 'Dashboard 4' },
-            resolve: {
-                loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
-                        {
-                            name: 'angles',
-                            files: ['js/plugins/chartJs/angles.js', 'js/plugins/chartJs/Chart.min.js']
-                        },
-                        {
-                            name: 'angular-peity',
-                            files: ['js/plugins/peity/jquery.peity.min.js', 'js/plugins/peity/angular-peity.js']
-                        },
-                        {
-                            serie: true,
-                            name: 'angular-flot',
-                            files: [ 'js/plugins/flot/jquery.flot.js', 'js/plugins/flot/jquery.flot.time.js', 'js/plugins/flot/jquery.flot.tooltip.min.js', 'js/plugins/flot/jquery.flot.spline.js', 'js/plugins/flot/jquery.flot.resize.js', 'js/plugins/flot/jquery.flot.pie.js', 'js/plugins/flot/curvedLines.js', 'js/plugins/flot/angular-flot.js', ]
-                        }
-                    ]);
-                }
-            }
-        })
-        .state('buy', {
-            abstract: true,
-            url: "/buy",
+            url: "/product",
             templateUrl: "views/common/content.html"
         })
-        .state('buy.list', {
+        .state('product.list', {
             url: "/list",
             templateUrl: "views/product_list.html",
             data: { pageTitle: '商品浏览' },
@@ -167,21 +33,29 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
                         {
-                            name: 'cgNotify',
-                            files: ['css/plugins/angular-notify/angular-notify.min.css','js/plugins/angular-notify/angular-notify.min.js']
-                        },
-                        {
                             files: ['js/plugins/footable/footable.all.min.js', 'css/plugins/footable/footable.core.css']
                         },
                         {
                             name: 'ui.footable',
                             files: ['js/plugins/footable/angular-footable.js']
+                        },
+                        {
+                            files: ['js/plugins/sweetalert/sweetalert.min.js', 'css/plugins/sweetalert/sweetalert.css']
+                        },
+                        {
+                            name: 'oitozero.ngSweetAlert',
+                            files: ['js/plugins/sweetalert/angular-sweetalert.min.js']
+                        },
+                        {
+                            insertBefore: '#loadBefore',
+                            name: 'toaster',
+                            files: ['js/plugins/toastr/toastr.min.js', 'css/plugins/toastr/toastr.min.css']
                         }
                     ]);
                 }
             }
         })
-        .state('buy.cart',{
+        .state('product.cart',{
             url:"/cart",
             templateUrl: "views/product_cart.html",
             data: { pageTitle: '我的购物车' },
@@ -199,13 +73,55 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
-        .state('buy.running', {
-            url: "/running",
-            templateUrl: "views/buy_running_orders.html",
-            data: { pageTitle: '待收货订单' },
+        .state('order', {
+            abstract: true,
+            url: "/order",
+            templateUrl: "views/common/content.html"
+        })
+        .state('order.detail',{
+            url:"/:orderNo",
+            templateUrl : "views/order_detail.html",
+            data : {pageTitle:'订单详情'},
+            controller : 'orderDetailCtrl',
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
+                        {
+                            insertBefore: '#loadBefore',
+                            name: 'toaster',
+                            files: ['js/plugins/toastr/toastr.min.js', 'css/plugins/toastr/toastr.min.css']
+                        },
+                        {
+                            files: ['js/plugins/sweetalert/sweetalert.min.js', 'css/plugins/sweetalert/sweetalert.css']
+                        },
+                        {
+                            name: 'oitozero.ngSweetAlert',
+                            files: ['js/plugins/sweetalert/angular-sweetalert.min.js']
+                        }
+                    ]);
+                }
+            }
+        })
+        .state('order.list',{
+            url:"/list/list?status&role",
+            templateUrl : "views/order_list.html",
+            data : {pageTitle:'订单列表'},
+            controller : 'orderListCtrl',
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            insertBefore: '#loadBefore',
+                            name: 'toaster',
+                            files: ['js/plugins/toastr/toastr.min.js', 'css/plugins/toastr/toastr.min.css']
+                        },
+                        {
+                            files: ['js/plugins/sweetalert/sweetalert.min.js', 'css/plugins/sweetalert/sweetalert.css']
+                        },
+                        {
+                            name: 'oitozero.ngSweetAlert',
+                            files: ['js/plugins/sweetalert/angular-sweetalert.min.js']
+                        },
                         {
                             serie: true,
                             files: ['js/plugins/dataTables/datatables.min.js','css/plugins/dataTables/datatables.min.css']
@@ -224,30 +140,30 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
                 }
             }
         })
-        .state('buy.finished', {
-            url: "/finished",
-            templateUrl: "views/buy_finished_orders.html",
-            data: { pageTitle: '已完成订单' },
-            resolve: {
-                loadPlugin: function ($ocLazyLoad) {
-                    return $ocLazyLoad.load([
-                        {
-                            serie: true,
-                            files: ['js/plugins/dataTables/datatables.min.js','css/plugins/dataTables/datatables.min.css']
-                        },
-                        {
-                            serie: true,
-                            name: 'datatables',
-                            files: ['js/plugins/dataTables/angular-datatables.min.js']
-                        },
-                        {
-                            serie: true,
-                            name: 'datatables.buttons',
-                            files: ['js/plugins/dataTables/angular-datatables.buttons.min.js']
-                        }
-                    ]);
-                }
-            }
+        .state('profile', {
+            abstract: true,
+            url: "/profile",
+            templateUrl: "views/common/content.html"
+        })
+        .state('profile.message', {
+            url: "/message",
+            templateUrl: "views/developing.html",
+            data: { pageTitle: '站内信' }
+        })
+        .state('profile.address', {
+            url: "/address",
+            templateUrl: "views/developing.html",
+            data: { pageTitle: '我的地址' }
+        })
+        .state('profile.contact', {
+            url: "/contact",
+            templateUrl: "views/developing.html",
+            data: { pageTitle: '我的联系方式' }
+        })
+        .state('profile.password', {
+            url: "/password",
+            templateUrl: "views/developing.html",
+            data: { pageTitle: '密码' }
         })
         .state('charts.sparkline_chart', {
             url: "/sparkline_chart",
@@ -714,7 +630,18 @@ function config($stateProvider, $urlRouterProvider, $ocLazyLoadProvider, IdlePro
         .state('login', {
             url: "/login",
             templateUrl: "views/login.html",
-            data: { pageTitle: 'Login', specialClass: 'gray-bg' }
+            data: { pageTitle: 'Login', specialClass: 'gray-bg' },
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            insertBefore: '#loadBefore',
+                            name: 'toaster',
+                            files: ['js/plugins/toastr/toastr.min.js', 'css/plugins/toastr/toastr.min.css']
+                        }
+                    ]);
+                }
+            }
         })
         .state('login_two_columns', {
             url: "/login_two_columns",

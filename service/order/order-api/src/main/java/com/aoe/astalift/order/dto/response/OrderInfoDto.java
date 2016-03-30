@@ -34,9 +34,19 @@ public class OrderInfoDto implements Serializable {
     @JsonProperty("address")
     private String address;
 
+    @JsonProperty("mobile")
+    private String mobile;
+
+    @JsonProperty
+    private String supplierMobile;
+
+    @JsonProperty
+    private String supplierAddress;
+
     //当前状态
     @JsonProperty
     private Integer statusCode;
+
 
     @JsonProperty
     private String statusDesc;
@@ -106,5 +116,29 @@ public class OrderInfoDto implements Serializable {
 
     public void setSupplierName(String supplierName) {
         this.supplierName = supplierName;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getSupplierMobile() {
+        return supplierMobile;
+    }
+
+    public void setSupplierMobile(String supplierMobile) {
+        this.supplierMobile = supplierMobile;
+    }
+
+    public String getSupplierAddress() {
+        return supplierAddress;
+    }
+
+    public void setSupplierAddress(String supplierAddress) {
+        this.supplierAddress = supplierAddress;
     }
 }

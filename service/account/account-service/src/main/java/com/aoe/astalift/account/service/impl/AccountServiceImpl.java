@@ -55,6 +55,7 @@ public class AccountServiceImpl implements AccountService {
                 for (UserRole userRole : userRoles) {
                     accountInfo.getRoles().add(userRole.getName());
                 }
+                accountInfo.setUserName(signIn.getUser().getUserProfile().getRealName());
                 return new BaseResponse<AccountInfo>(accountInfo);
             }
         }
@@ -74,6 +75,7 @@ public class AccountServiceImpl implements AccountService {
             accountInfo.getRoles().add(userRole.getName());
         }
         accountInfo.setUserId(userId);
+        accountInfo.setUserName(user.getUserProfile().getRealName());
         return new BaseResponse<AccountInfo>(accountInfo);
     }
 }

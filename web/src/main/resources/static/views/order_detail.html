@@ -1,0 +1,130 @@
+<toaster-container></toaster-container>
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-8">
+        <h2>订单详情</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html#/widgets">返回主页</a>
+            </li>
+            <li class="active">
+                <strong>订单详情</strong>
+            </li>
+        </ol>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="title-action">
+            <ol class="breadcrumb">
+                <span><strong>订单状态：</strong></span><span class="text-navy">{{detail.statusDesc}}</span>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="ibox-content p-xl">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h5>客户:</h5>
+                        <address>
+                            <strong>{{detail.customer}}</strong><br>
+                            <br>{{detail.address}}<br>
+                            <abbr title="Phone">联系电话:</abbr> {{detail.mobile}}
+                        </address>
+                    </div>
+
+                    <div class="col-sm-6 text-right">
+                        <h4>订单号</h4>
+                        <h4 class="text-navy">{{detail.orderNo}}</h4>
+                        <span>供应商:</span>
+                        <address>
+                            <strong>{{detail.supplier}}</strong><br>
+                            {{detail.supplierAddress}}<br>
+                            <abbr title="Phone">联系电话:</abbr> {{detail.supplierMobile}}
+                        </address>
+                        <p>
+                            <span><strong>下单时间:</strong> {{detail.orderDate}}</span><br/>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="table-responsive m-t">
+                    <table class="table invoice-table">
+                        <thead>
+                        <tr>
+                            <th>产品图片</th>
+                            <th>产品信息</th>
+                            <th>数量</th>
+                            <th>单价</th>
+                            <th>折扣</th>
+                            <th>总价</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="item in detail.orderItemDetailList">
+                            <td>
+                                <img width="60" height="60" ng-src="{{item.productTitleImage}}">
+                            </td>
+                            <td>{{item.productTitle}}</td>
+                            <td>{{item.amount}}</td>
+                            <td>{{item.originalPrice | currency : "￥"}}</td>
+                            <td>{{item.discount * 10}}折</td>
+                            <td>{{item.amount * item.originalPrice * item.discount | currency : "￥"  }}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /table-responsive -->
+
+                <table class="table invoice-total">
+                    <tbody>
+                    <tr>
+                        <td><strong>订单总额 :</strong></td>
+                        <td>{{detail.total | currency :"￥"}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+                <div class="ibox-content" id="ibox-content">
+                    <div id="vertical-timeline" class="vertical-container dark-timeline" ng-repeat="item in detail.histories">
+                        <div class="vertical-timeline-block">
+                            <div class="vertical-timeline-icon blue-bg">
+                                <i class="fa fa-file-text"></i>
+                            </div>
+
+                            <div class="vertical-timeline-content">
+                                <h2>{{item.desc}}</h2>
+                                <!--<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since.</p>-->
+                                    <span class="vertical-date">
+                                        <small>{{item.createTime}}</small>
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="text-right">
+                    <button class="btn btn-primary" ng-show="showConfirm" ng-click="setOrderStatus({'actionType':'accept','extra':null})"><i class="fa"></i>备货完成</button>
+                    <button class="btn btn-warning" ng-show="showRefuse" ng-click="setOrderStatus({'actionType':'cancel','extra':null})"><i class="fa"></i>货源不足</button>
+                    <button class="btn btn-primary" ng-show="showPaid" ng-click="setOrderStatus({'actionType':'paid','extra':null})"><i class="fa"></i>对方已付款</button>
+                    <!--<button class="btn btn-primary" ng-show="showDelivery"><i class="fa"></i>输入物流信息</button>-->
+                    <button class="btn btn-primary" ng-show="showReceived" ng-click="setOrderStatus({'actionType':'receive','extra':null})"><i class="fa"></i>我已收货</button>
+                </div>
+
+                <form class="text-right" ng-show="showDelivery">
+                    <div class="form-group">
+                        <input type="text" name="company"  placeholder="物流公司" required="true" ng-model="deliverInfo.company">
+                        <input type="text" name="deliveryNo"  placeholder="货运单号" required="true" ng-model="deliverInfo.deliveryNo">
+                        <button type="submit" class="btn btn-primary m-b"  ng-click="setOrderStatus({'actionType':'deliver','extra':deliverInfo})">确认物流信息</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

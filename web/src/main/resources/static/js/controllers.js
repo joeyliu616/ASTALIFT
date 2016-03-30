@@ -3319,7 +3319,7 @@ function jstreeCtrl($scope) {
 }
 
 
-function productListCtrl($scope,$http,$log,notify){
+function productListCtrl($scope,$http,$log,SweetAlert){
 
     $http.get('/products.json').then(
         function successCallback(responseData){
@@ -3340,7 +3340,11 @@ function productListCtrl($scope,$http,$log,notify){
         $http.post("/buy/cart/" + item.id + ".json", cartItem).then(
             function successCallback(response){
                 if(response.data.code == 0){
-                    notify({ message: '已保存到您的购物车', classes: 'alert-success'});
+                    SweetAlert.swal({
+                        title: "成功!",
+                        text: "已经将商品添加到您的购物车",
+                        type: "success"
+                    });
                 }
         }, function errorCallback(response){
                 handle403(response);
@@ -3441,7 +3445,7 @@ function shoppingCartCtrl($scope, $http, $log, SweetAlert){
 }
 
 
-function loginCtrl($log, $http, $scope,$rootScope){
+function loginCtrl($log, $http, $scope,$rootScope, toaster){
 
     $scope.error_code=0;
     $scope.error_msg="";
@@ -3449,6 +3453,7 @@ function loginCtrl($log, $http, $scope,$rootScope){
     $scope.login = function (account){
         $http.post("/auth/login.json", account).then(
             function successCallback(responseData){
+                handleErrorResponse(responseData,toaster);
                 $log.log(JSON.stringify(responseData))
                 if(0 != responseData.data.code){
                     $scope.error_code = responseData.data.code;
@@ -3461,11 +3466,112 @@ function loginCtrl($log, $http, $scope,$rootScope){
     }
 }
 
-function buyRunningOrdersCtrl($scope, DTOptionsBuilder, $http, $log){
+
+function orderDetailCtrl($stateParams,$log,$http,toaster,$scope,SweetAlert,$state){
+    var orderId = $stateParams.orderNo;
+
+    $scope.asBuyer = false;
+    $scope.showConfirm = false;
+    $scope.showRefuse = false;
+    $scope.showPaid = false;
+    $scope.showDelivery = false;
+    $scope.showReceived = false;
+    $scope.deliverInfo = {
+        "company":"",
+        "deliveryNo":""
+    }
+
+    $log.log(JSON.stringify($stateParams));
+
+    $http.get("/order/"+orderNo).then(
+        function successCallback(responseData){
+            handleErrorResponse(responseData,toaster);
+            if(responseData.data.code == 0){
+                $log.log("order detail: "+JSON.stringify(responseData.data.data));
+                $scope.detail = responseData.data.data;
+
+                $http.get("/auth/accountInfo").success(
+                    function (responseData){
+                        if(responseData.data.userName == $scope.detail.customer){
+                            $scope.asBuyer = true;
+                        }else{
+                            $scope.asBuyer = false;
+                        }
+
+                        //显示订单确认按钮.
+                        if(false == $scope.asBuyer && $scope.detail.statusCode == 1){
+                            $scope.showConfirm = true;
+                            $scope.showRefuse = true;
+                        }
+
+                        //显示订单等待付款按钮
+                        if(false == $scope.asBuyer && $scope.detail.statusCode == 2){
+                            $scope.showPaid = true;
+                        }
+
+                        //显示输入物流信息按钮
+                        if(false == $scope.asBuyer && $scope.detail.statusCode == 3){
+                            $scope.showDelivery = true;
+                        }
+
+                        //显示收货按钮
+                        if(true == $scope.asBuyer && $scope.detail.statusCode == 4){
+                            $scope.showReceived = true;
+                        }
+
+                        $log.log("买家： "+$scope.asBuyer);
+                        $log.log("显示备货完成按钮:" + $scope.showConfirm);
+                        $log.log("显示拒绝订单按钮:" + $scope.showRefuse);
+                        $log.log("显示付款确认按钮:" + $scope.showPaid);
+                        $log.log("显示输入物流信息按钮: " + $scope.showDelivery);
+                        $log.log("显示确认收货按钮:" + $scope.showReceived);
+                    }
+                );
+
+                return responseData.data.data;
+            }
+        },
+        function errorCallback(responseData){
+            handle403(responseData);
+        }
+    );
+
+
+
+    $scope.setOrderStatus = function (orderAction){
+        $log.log('setOrderStatus '+ JSON.stringify(orderAction));
+        $http.put("/order/"+orderNo, orderAction).then(
+            function successCallback(responseData){
+                handleErrorResponse(responseData,toaster);
+                if(responseData.data.code == 0){
+                    SweetAlert.swal({
+                        title: "成功!",
+                        text: "更新了订单状态",
+                        type: "success"
+                    });
+                    $state.go('order.detail', {orderNo: orderId});
+                }
+            },
+            function errorCallback(responseData){
+                handle403(responseData);
+            }
+        );
+    }
+
+}
+
+
+function orderListCtrl($scope, DTOptionsBuilder, $http, $log,$state,$stateParams) {
+
+    //跳转到订单详情
+    $scope.toOrderDetails = function (orderNo){
+        $state.go('order.detail', {orderNo: orderNo});
+    }
+
+    var status = $stateParams.status;
+
 
     $scope.items = [];
-
-
     $scope.dtOptions = DTOptionsBuilder.newOptions()
         .withDOM('<"html5buttons"B>lTfgitp')
         .withButtons([
@@ -3485,209 +3591,22 @@ function buyRunningOrdersCtrl($scope, DTOptionsBuilder, $http, $log){
             }
         ]);
 
+    var url = "/orders?status=" + status;
+    if($stateParams.hasOwnProperty('role')){
+        var roleParam = "&role=" + $stateParams.role;
+        url += roleParam;
+    }
 
-    //load table
-    $http.get("/buy/unfinished_orders").then(
+    $http.get(url).then(
         function successCallback(responseData){
-            $log.log(JSON.stringify(responseData));
             $scope.items = handleOrderInfo(responseData);
         },
         function errorCallback(responseData){
             handle403(responseData);
         }
     );
-}
-
-function buyFinishedOrdersCtrl($scope, DTOptionsBuilder, $http, $log){
-    $scope.items = [];
-
-    $scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withDOM('<"html5buttons"B>lTfgitp')
-        .withButtons([
-            {extend: 'copy'},
-            {extend: 'csv'},
-            {extend: 'excel'},
-            {extend: 'pdf'},
-
-            {extend: 'print',
-                customize: function (win){
-                    $(win.document.body).addClass('white-bg');
-                    $(win.document.body).css('font-size', '10px');
-                    $(win.document.body).find('table')
-                        .addClass('compact')
-                        .css('font-size', 'inherit');
-                }
-            }
-        ]);
-
-    //load table
-    $http.get("/buy/finished_orders").then(
-        function successCallback(responseData){
-            $log.log(JSON.stringify(responseData));
-            $scope.items = handleOrderInfo(responseData);
-        },
-        function errorCallback(responseData){
-            handle403(responseData);
-        }
-    );
-}
 
 
-function sellUnAcceptedOrdersCtrl($scope, DTOptionsBuilder, $http, $log){
-
-    $scope.items = [];
-
-    function loadTable(){
-        //load table
-        $http.get("/sell/unAccepted_orders").then(
-            function successCallback(responseData){
-                $log.log(JSON.stringify(responseData));
-                $scope.items = handleOrderInfo(responseData);
-            },
-            function errorCallback(responseData){
-                handle403(responseData);
-            }
-        );
-    }
-
-    $scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withDOM('<"html5buttons"B>lTfgitp')
-        .withButtons([
-            {extend: 'copy'},
-            {extend: 'csv'},
-            {extend: 'excel'},
-            {extend: 'pdf'},
-
-            {extend: 'print',
-                customize: function (win){
-                    $(win.document.body).addClass('white-bg');
-                    $(win.document.body).css('font-size', '10px');
-                    $(win.document.body).find('table')
-                        .addClass('compact')
-                        .css('font-size', 'inherit');
-                }
-            }]
-    );
-
-    $scope.orderAction = function (orderNo, actionType){
-        var orderAction = {
-            "actionType" : actionType
-        }
-        $http.put("/sell/order/"+orderNo, orderAction).then(
-
-            function successCallback(responseData){
-                $log.log(JSON.stringify(responseData));
-                if(responseData.data.code == 0){
-                    loadTable();
-                }
-            },
-
-            function errorCallback(responseData){
-                $log.log(JSON.stringify(responseData));
-                handle403(responseData);
-            }
-        );
-    }
-
-    loadTable();
-}
-
-
-function sellUnFinishedOrdersCtrl($scope, DTOptionsBuilder, $http, $log){
-    $scope.items = [];
-
-    function loadTable(){
-        //load table
-        $http.get("/sell/unFinished_orders").then(
-            function successCallback(responseData){
-                $log.log(JSON.stringify(responseData));
-                $scope.items = handleOrderInfo(responseData);
-            },
-            function errorCallback(responseData){
-                handle403(responseData);
-            }
-        );
-    }
-
-    $scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withDOM('<"html5buttons"B>lTfgitp')
-        .withButtons([
-            {extend: 'copy'},
-            {extend: 'csv'},
-            {extend: 'excel'},
-            {extend: 'pdf'},
-
-            {extend: 'print',
-                customize: function (win){
-                    $(win.document.body).addClass('white-bg');
-                    $(win.document.body).css('font-size', '10px');
-                    $(win.document.body).find('table')
-                        .addClass('compact')
-                        .css('font-size', 'inherit');
-                }
-            }]
-    );
-
-    $scope.orderAction = function (orderNo, actionType){
-        var orderAction = {
-            "actionType" : actionType
-        }
-        $http.put("/sell/order/"+orderNo, orderAction).then(
-
-            function successCallback(responseData){
-                $log.log(JSON.stringify(responseData));
-                if(responseData.data.code == 0){
-                    loadTable();
-                }
-            },
-
-            function errorCallback(responseData){
-                $log.log(JSON.stringify(responseData));
-                handle403(responseData);
-            }
-        );
-    }
-
-    loadTable();
-}
-
-
-function sellFinishedOrdersCtrl($scope, DTOptionsBuilder, $http, $log){
-    $scope.items = [];
-
-    function loadTable(){
-        //load table
-        $http.get("/sell/finished_orders").then(
-            function successCallback(responseData){
-                $log.log(JSON.stringify(responseData));
-                $scope.items = handleOrderInfo(responseData);
-            },
-            function errorCallback(responseData){
-                handle403(responseData);
-            }
-        );
-    }
-
-    $scope.dtOptions = DTOptionsBuilder.newOptions()
-        .withDOM('<"html5buttons"B>lTfgitp')
-        .withButtons([
-            {extend: 'copy'},
-            {extend: 'csv'},
-            {extend: 'excel'},
-            {extend: 'pdf'},
-
-            {extend: 'print',
-                customize: function (win){
-                    $(win.document.body).addClass('white-bg');
-                    $(win.document.body).css('font-size', '10px');
-                    $(win.document.body).find('table')
-                        .addClass('compact')
-                        .css('font-size', 'inherit');
-                }
-            }]
-    );
-
-    loadTable();
 }
 
 function navCtrl($scope, $http, $log){
@@ -3742,6 +3661,38 @@ function handleOrderInfo(responseData){
     return items;
 }
 
+
+function getOrderDetail($http, $log, toaster, orderNo, orderDetail){
+
+    $http.get("/order/"+orderNo).then(
+        function successCallback(responseData){
+            handleErrorResponse(responseData,toaster);
+            if(responseData.data.code == 0){
+                $log.log("order detail: "+JSON.stringify(responseData.data.data));
+                orderDetail = responseData.data.data;
+                return responseData.data.data;
+            }
+        },
+        function errorCallback(responseData){
+            handle403(responseData);
+        }
+    );
+}
+
+//处理异常
+function handleErrorResponse(responseData, toaster){
+
+    if(0 != responseData.data.code){
+        toaster.pop({
+            type: 'error',
+            title: '粗错啦',
+            body: responseData.data.msg,
+            showCloseButton: true,
+            timeout: 3000
+        });
+    }
+}
+
 /**
  *
  * Pass all functions into module
@@ -3789,10 +3740,7 @@ angular
     .controller('productListCtrl',productListCtrl)
     .controller('shoppingCartCtrl',shoppingCartCtrl)
     .controller('loginCtrl', loginCtrl)
-    .controller('buyRunningOrdersCtrl',buyRunningOrdersCtrl)
-    .controller('buyFinishedOrdersCtrl',buyFinishedOrdersCtrl)
-    .controller('sellUnAcceptedOrdersCtrl',sellUnAcceptedOrdersCtrl)
-    .controller('sellUnFinishedOrdersCtrl',sellUnFinishedOrdersCtrl)
-    .controller('sellFinishedOrdersCtrl',sellFinishedOrdersCtrl)
+    .controller('orderDetailCtrl',orderDetailCtrl)
+    .controller('orderListCtrl',orderListCtrl)
     .controller('navCtrl',navCtrl);
 

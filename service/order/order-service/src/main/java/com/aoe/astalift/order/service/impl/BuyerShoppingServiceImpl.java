@@ -121,14 +121,12 @@ public class BuyerShoppingServiceImpl implements BuyerShoppingService {
             return new BaseResponse<OrderDetail>(new OrderError.OrderNotExist());
         }
 
-        //只能在卖方没有备货前 TODO 讨论其他取消订单的方法
         if(byOrderNo.getCurrentStatus() == OrderStatus.INIT.getCode()
                 || byOrderNo.getCurrentStatus() == OrderStatus.CONFIRM.getCode()
                 )
         {
             OrderStatusHistoryUtil.addOrderStatusHistory(byOrderNo, OrderStatus.CANCEL, "买方取消订单");
             orderRepository.save(byOrderNo);
-            //TODO add data to orderDetail
             OrderDetail orderDetail = new OrderDetail();
             orderDetail.setOrderNo(orderNo);
             return new BaseResponse<OrderDetail>(orderDetail);
@@ -205,6 +203,12 @@ public class BuyerShoppingServiceImpl implements BuyerShoppingService {
         return new BaseResponse<List<OrderInfoDto>>(orderInfoDtos);
     }
 
+    public BaseResponse<List<OrderInfoDto>> listOrder(Integer buyerId, Integer statusCode) {
+        List<Order> orderList = orderRepository.findByBuyerIdAndCurrentStatus(buyerId, statusCode);
+        List<OrderInfoDto> orderInfoDtos  = getOrderInfoDtos(orderList);
+        return new BaseResponse<List<OrderInfoDto>>(orderInfoDtos);
+    }
+
 
     public BaseResponse<List<OrderInfoDto>> listUnfinishedOrder(Integer buyerId){
 
@@ -252,6 +256,17 @@ public class BuyerShoppingServiceImpl implements BuyerShoppingService {
             return null;
         }
         return userProfile.getData().getRealName();
+    }
+
+    private List<OrderInfoDto> getOrderInfoDtos(List<Order> orders){
+        List<OrderInfoDto> orderInfoDtos = new LinkedList<OrderInfoDto>();
+        for (Order order : orders) {
+            ProfileInfo buyerProfile = profileService.getUserProfile(order.getBuyerId()).getData();
+            ProfileInfo supplierProfile = profileService.getUserProfile(order.getSupplierId()).getData();
+            OrderInfoDto orderInfoDto = OrderDtoUtil.getOrderInfoDto(order, buyerProfile,supplierProfile);
+            orderInfoDtos.add(orderInfoDto);
+        }
+        return orderInfoDtos;
     }
 
 

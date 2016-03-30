@@ -1,0 +1,100 @@
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="shoppingCartCtrl">
+    <div class="row">
+        <div class="col-md-9">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <span class="pull-right">共<strong>{{items.length}}</strong>项</span>
+                    <h5>我的购物车</h5>
+                </div>
+                <div class="ibox-content" ng-repeat="item in items">
+                    <div class="table-responsive">
+                        <table class="table shoping-cart-table">
+                            <tbody>
+                            <tr>
+                                <td width="90">
+                                    <img ng-src="{{item.productInfo.titleImage}}">
+                                </td>
+                                <td class="desc">
+                                    <h3>
+                                        <a class="text-navy">
+                                            {{item.productInfo.title}}
+                                        </a>
+                                    </h3>
+                                    <div class="m-t-sm">
+                                        <a class="text-muted" ng-click="removeItem(item.productInfo.id)"><i class="fa fa-trash"></i> 删除</a>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    {{item.productInfo.price*0.8 | currency:"￥"}}
+                                    <s class="small text-muted">{{item.productInfo.price | currency:"￥"}}</s>
+                                </td>
+                                <td width="65">
+                                    <input type="text" class="form-control" placeholder="{{item.quantity}}" ng-model="item.quantity" ng-change="reSum()">
+                                </td>
+                                <td>
+                                    <h4>
+                                        {{item.productInfo.price*0.8*item.quantity | currency:"￥"}}
+                                    </h4>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+
+                <div class="ibox-content">
+                    <button class="btn btn-primary pull-right" ng-click="saveCartSuccess()"><i class="fa fa-check"></i> 保存购物车</button>
+                    <a href="#/buy/list" class="btn btn-white btn-sm fa fa-arrow-left">  我再逛逛</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-3">
+
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>总价</h5>
+                </div>
+                <div class="ibox-content">
+                    <h2 class="font-bold">
+                        {{sum | currency : "￥"}}
+                    </h2>
+
+                    <hr/>
+                            <span class="text-muted small">
+                                *您的订单将在一个工作日内备货完成. 具体情况请留意物流提醒.
+                            </span>
+                    <div class="m-t-sm">
+                        <div class="btn-group">
+                            <a class="btn btn-primary btn-sm" ng-click="orderProducts(items)"><i class="fa fa-shopping-cart"></i> 确认下单</a>
+                            <a href="#/buy/list" class="btn btn-white btn-sm">  我再逛逛</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Support</h5>
+                </div>
+                <div class="ibox-content text-center">
+
+
+
+                    <h3><i class="fa fa-phone"></i> +86 123 456 789</h3>
+                            <span class="small">
+                                如我您有任何问题, 请拨打服务电话.
+                            </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+</div>

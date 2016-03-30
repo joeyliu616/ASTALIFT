@@ -17,6 +17,12 @@ public class AccountInfo implements Serializable {
     @JsonProperty
     List<String> roles = new ArrayList<String>();
 
+    @JsonProperty
+    private String userName;
+
+    @JsonProperty("session_key")
+    String sessionKey;
+
     public Integer getUserId() {
         return userId;
     }
@@ -31,5 +37,21 @@ public class AccountInfo implements Serializable {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
+    }
+
+    public String getSessionKey() {
+        return sessionKey;
+    }
+
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

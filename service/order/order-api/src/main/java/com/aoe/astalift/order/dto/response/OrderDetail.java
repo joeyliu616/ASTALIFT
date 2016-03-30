@@ -10,11 +10,32 @@ import java.util.List;
  */
 public class OrderDetail extends OrderInfoDto implements Serializable{
 
+
     @JsonProperty
     private List<OrderItemDetail> orderItemDetailList;
 
     @JsonProperty
     private List<OrderHistoryDto> histories;
+
+    public OrderDetail() {
+        super();
+    }
+
+    public OrderDetail(OrderInfoDto orderInfoDto) {
+        super();
+        this.setStatusDesc(orderInfoDto.getStatusDesc());
+        this.setSupplierName(orderInfoDto.getSupplierName());
+        this.setOrderDate(orderInfoDto.getOrderDate());
+        this.setStatusDesc(orderInfoDto.getStatusDesc());
+        this.setStatusCode(orderInfoDto.getStatusCode());
+        this.setCustomerName(orderInfoDto.getCustomerName());
+        this.setAddress(orderInfoDto.getAddress());
+        this.setOrderNo(orderInfoDto.getOrderNo());
+        this.setTotal(orderInfoDto.getTotal());
+        this.setMobile(orderInfoDto.getMobile());
+        this.setSupplierMobile(orderInfoDto.getSupplierMobile());
+        this.setSupplierAddress(orderInfoDto.getSupplierAddress());
+    }
 
 
     public List<OrderItemDetail> getOrderItemDetailList() {

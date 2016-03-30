@@ -33,6 +33,9 @@ public class SupplierOrderProcessServiceImpl implements SupplierOrderProcessServ
     @Resource
     ProfileService profileService;
 
+    @Resource
+    OrderServiceUtil orderServiceUtil;
+
     public BaseResponse<List<OrderInfoDto>> listOrder(Integer supplierId) {
         if(null == supplierId){
             return new BaseResponse<List<OrderInfoDto>>(new AccountError.UserNotExist());
@@ -48,6 +51,16 @@ public class SupplierOrderProcessServiceImpl implements SupplierOrderProcessServ
         }
 
         return new BaseResponse<List<OrderInfoDto>>(orderInfoDtos);
+    }
+
+    public BaseResponse<List<OrderInfoDto>> listOrder(Integer supplierId, Integer statusCode) {
+        if(null == supplierId){
+            return new BaseResponse<List<OrderInfoDto>>(new AccountError.UserNotExist());
+        }
+
+        List<Order> orderList = orderRepository.findBySupplierIdAndCurrentStatus(supplierId, statusCode);
+
+        return new BaseResponse<List<OrderInfoDto>>(orderServiceUtil.getOrderInfoDtos(orderList));
     }
 
     public BaseResponse<List<OrderInfoDto>> listUnfinishedOrders(Integer supplierId) {

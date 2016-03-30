@@ -25,4 +25,5 @@ public class ServerErrorAdvice extends ResponseEntityExceptionHandler {
         return new ResponseEntity<BaseResponse>(new BaseResponse(new AccountError.SessionInvalid()), HttpStatus.FORBIDDEN);
     }
 
+
 }

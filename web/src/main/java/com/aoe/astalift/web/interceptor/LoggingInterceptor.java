@@ -87,6 +87,11 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
         return requestMap;
     }
 
+    public static String getRequestBod(HttpServletRequest httpServletRequest){
+
+        return null;
+    }
+
     public static String getIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

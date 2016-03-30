@@ -1,6 +1,7 @@
 package com.aoe.astalift.order.service;
 
 import com.aoe.astalift.common.dto.BaseResponse;
+import com.aoe.astalift.order.constants.OrderStatus;
 import com.aoe.astalift.order.dto.response.OrderDetail;
 import com.aoe.astalift.order.dto.response.OrderInfoDto;
 import com.aoe.astalift.order.dto.request.OrderItemDto;
@@ -23,6 +24,8 @@ public interface BuyerShoppingService {
     BaseResponse<OrderDetail> getOrderDetail(String orderNo);
 
     BaseResponse<List<OrderInfoDto>> listOrder(Integer buyerId);
+
+    BaseResponse<List<OrderInfoDto>> listOrder(Integer buyerId,Integer statusCode);
 
     BaseResponse<List<OrderInfoDto>> listUnfinishedOrder(Integer buyerId);
 
